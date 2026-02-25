@@ -2,7 +2,7 @@
 
 > **A unique Hytale generator mod with tier-based progression and integrated economy.**
 
----
+
 
 ## ⚡ Quick Start Instructions
 
@@ -127,4 +127,5 @@ and moves old `cobblestonezufall-*.jar` files to:
 
 For complete technical details, see:
 - `PROJECT_CONTEXT.md`
+
 
