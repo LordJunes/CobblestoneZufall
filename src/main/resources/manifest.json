@@ -1,10 +1,14 @@
 {
-  "Group": "com.example",
+  "Group": "com.minecraft_ceo",
   "Name": "CobblestoneZufall",
   "Version": "1.2.5",
-  "Description": "A Hytale server mod",
-  "Authors": [{"Name": "Lord Junes"}],
-  "Main": "com.example.cobblestonezufall.CobblestoneZufallPlugin",
+  "Description": "Einzigartige Cobblestone Generator Mod mit Economy-System",
+  "Authors": [
+    {
+      "Name": "Minecraft_CEO"
+    }
+  ],
+  "Main": "com.minecraft_ceo.cobblestonezufall.CobblestoneZufallPlugin",
   "LoadOrder": "POSTWORLD",
   "OptionalDependencies": {},
   "IncludesAssetPack": true
