@@ -1,17 +1,17 @@
-# 💎 CobblestoneZufall - Minecraft_CEO Edition
+# CobblestoneZufall - Minecraft_CEO Edition
 
 > **A unique Hytale generator mod with tier-based progression and integrated economy.**
 
 
 
-## ⚡ Quick Start Instructions
+## Quick Start Instructions
 
-### 🛌 For Lazy People
+### For Lazy People
 1. Download this project as **ZIP** and extract it.
-2. Create a folder named `server` and drop your `HytaleServer.jar` in it.
-3. Double-click **`BUILD_MOD.bat`**. Done.
+2. Double-click **`BUILD_MOD.bat`**. 
+   *(The script will automatically try to find your Hytale installation and build the mod for you!)*
 
-### 👨‍💻 For Normal People
+### For Normal People
 1. Clone the repository: `git clone <repo_url>`
 2. Place your `HytaleServer.jar` into the `/server` directory to provide the Hytale API dependencies.
 3. Run the build command:
@@ -127,5 +127,6 @@ and moves old `cobblestonezufall-*.jar` files to:
 
 For complete technical details, see:
 - `PROJECT_CONTEXT.md`
+
 
 
