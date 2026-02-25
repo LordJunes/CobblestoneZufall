@@ -1,15 +1,36 @@
 @echo off
-title Minecraft_CEO Mod Builder
+setlocal enabledelayedexpansion
+title Minecraft_CEO Mod Builder - AutoDetect Edition
 echo ==================================================
 echo       COBBLESTONEZUFALL MOD - EASY BUILDER
 echo ==================================================
 echo.
 
-:: 1. Check if the server folder and JAR exist
-if not exist "server\HytaleServer.jar" (
-    echo [ERROR] HytaleServer.jar not found!
+:: Path configuration
+set "TARGET_DIR=server"
+set "TARGET_JAR=%TARGET_DIR%\HytaleServer.jar"
+set "HYTALE_PATH=%APPDATA%\Hytale\install\release\package\game\latest\Server\HytaleServer.jar"
+
+:: 1. Check if JAR is already there
+if exist "%TARGET_JAR%" (
+    echo [INFO] HytaleServer.jar already present in project.
+    goto START_BUILD
+)
+
+echo [INFO] HytaleServer.jar missing in project. Searching local Hytale installation...
+
+:: 2. Try to auto-locate HytaleServer.jar
+if exist "%HYTALE_PATH%" (
+    echo [SUCCESS] Found Hytale installation at:
+    echo "%HYTALE_PATH%"
     echo.
-    echo Please do the following:
+    echo [INFO] Copying HytaleServer.jar to project...
+    if not exist "%TARGET_DIR%" mkdir "%TARGET_DIR%"
+    copy /Y "%HYTALE_PATH%" "%TARGET_JAR%" >nul
+) else (
+    echo [ERROR] Could not find HytaleServer.jar automatically.
+    echo.
+    echo Please do the following manually:
     echo 1. Create a folder named "server" in this directory.
     echo 2. Copy your "HytaleServer.jar" into that folder.
     echo.
@@ -17,10 +38,12 @@ if not exist "server\HytaleServer.jar" (
     exit
 )
 
-echo [INFO] Checking environment and building mod...
+:START_BUILD
+echo.
+echo [INFO] Environment ready. Starting Gradle build...
 echo.
 
-:: 2. Run Gradle build
+:: 3. Run Gradle build
 call gradlew.bat shadowJar
 
 if %ERRORLEVEL% EQU 0 (
