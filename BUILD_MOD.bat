@@ -1,63 +1,72 @@
 @echo off
 setlocal enabledelayedexpansion
-title Minecraft_CEO Mod Builder - AutoDetect Edition
+title Minecraft_CEO Mod Builder - Full Auto Edition
 echo ==================================================
-echo       COBBLESTONEZUFALL MOD - EASY BUILDER
+echo       COBBLESTONEZUFALL MOD - FULL AUTO
 echo ==================================================
 echo.
 
-:: Path configuration
+:: --- CONFIGURATION ---
+set "MOD_VERSION=1.2.5"
+set "JAR_NAME=cobblestonezufall-!MOD_VERSION!.jar"
 set "TARGET_DIR=server"
 set "TARGET_JAR=%TARGET_DIR%\HytaleServer.jar"
-set "HYTALE_PATH=%APPDATA%\Hytale\install\release\package\game\latest\Server\HytaleServer.jar"
 
-:: 1. Check if JAR is already there
+:: Paths using system variables for universal compatibility
+set "HYTALE_INSTALL_PATH=%APPDATA%\Hytale\install\release\package\game\latest\Server\HytaleServer.jar"
+set "HYTALE_MODS_FOLDER=%APPDATA%\Hytale\UserData\Mods"
+
+:: 1. SEARCH FOR HYTALE SERVER JAR
 if exist "%TARGET_JAR%" (
-    echo [INFO] HytaleServer.jar already present in project.
-    goto START_BUILD
+    echo [INFO] HytaleServer.jar already in project.
+) else (
+    echo [INFO] Searching for Hytale installation...
+    if exist "%HYTALE_INSTALL_PATH%" (
+        echo [SUCCESS] Found Hytale at: %HYTALE_INSTALL_PATH%
+        if not exist "%TARGET_DIR%" mkdir "%TARGET_DIR%"
+        copy /Y "%HYTALE_INSTALL_PATH%" "%TARGET_JAR%" >nul
+    ) else (
+        echo [ERROR] Could not find HytaleServer.jar! 
+        echo Please put it into a folder named 'server' manually.
+        pause
+        exit
+    )
 )
 
-echo [INFO] HytaleServer.jar missing in project. Searching local Hytale installation...
+:: 2. START THE BUILD PROCESS
+echo.
+echo [INFO] Starting build process. This may take a minute...
+echo.
+call gradlew.bat shadowJar
 
-:: 2. Try to auto-locate HytaleServer.jar
-if exist "%HYTALE_PATH%" (
-    echo [SUCCESS] Found Hytale installation at:
-    echo "%HYTALE_PATH%"
+if %ERRORLEVEL% NEQ 0 (
     echo.
-    echo [INFO] Copying HytaleServer.jar to project...
-    if not exist "%TARGET_DIR%" mkdir "%TARGET_DIR%"
-    copy /Y "%HYTALE_PATH%" "%TARGET_JAR%" >nul
-) else (
-    echo [ERROR] Could not find HytaleServer.jar automatically.
-    echo.
-    echo Please do the following manually:
-    echo 1. Create a folder named "server" in this directory.
-    echo 2. Copy your "HytaleServer.jar" into that folder.
-    echo.
+    echo [ERROR] Build failed! Check if Java 21 is installed.
     pause
     exit
 )
 
-:START_BUILD
+:: 3. AUTOMATIC INSTALLATION
 echo.
-echo [INFO] Environment ready. Starting Gradle build...
-echo.
+echo [INFO] Build successful! Installing mod...
 
-:: 3. Run Gradle build
-call gradlew.bat shadowJar
+if not exist "%HYTALE_MODS_FOLDER%" mkdir "%HYTALE_MODS_FOLDER%"
+
+:: Copy the built JAR to the Hytale Mods folder
+copy /Y "build\libs\%JAR_NAME%" "%HYTALE_MODS_FOLDER%\" >nul
 
 if %ERRORLEVEL% EQU 0 (
     echo.
     echo ==================================================
-    echo ✅ SUCCESS! Your mod has been built.
+    echo ✅ SUCCESS! Mod is ready to play.
     echo.
-    echo You can find the playable file here:
-    echo \build\libs\cobblestonezufall-1.2.5.jar
+    echo Extracted to: %CD%
+    echo Installed to: %HYTALE_MODS_FOLDER%\%JAR_NAME%
+    echo.
+    echo Just start Hytale and enjoy!
     echo ==================================================
 ) else (
-    echo.
-    echo [ERROR] Build failed. 
-    echo Do you have Java 21 or newer installed?
+    echo [ERROR] Could not copy the mod to the Hytale folder.
 )
 
 echo.
