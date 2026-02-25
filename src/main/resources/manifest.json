@@ -1,0 +1,11 @@
+{
+  "Group": "com.example",
+  "Name": "CobblestoneZufall",
+  "Version": "1.2.5",
+  "Description": "A Hytale server mod",
+  "Authors": [{"Name": "Lord Junes"}],
+  "Main": "com.example.cobblestonezufall.CobblestoneZufallPlugin",
+  "LoadOrder": "POSTWORLD",
+  "OptionalDependencies": {},
+  "IncludesAssetPack": true
+}

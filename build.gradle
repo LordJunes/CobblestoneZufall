@@ -1,0 +1,151 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.0'
+}
+
+group = 'com.minecraft_ceo.cobblestonezufall'
+version = (findProperty('modVersion') ?: '1.0.0').toString()
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Force Gradle to look for any JAR in the server directory
+    compileOnly fileTree(dir: 'server', include: ['*.jar'])
+    
+    // JSR305 annotations (@Nonnull, @Nullable)
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'com.google.code.gson:gson:2.10.1'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    dependencies {
+        exclude(dependency { it.moduleGroup == 'com.hypixel' })
+    }
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+tasks.named('build') {
+    dependsOn shadowJar
+}
+
+def bumpPatchVersionString(String inputVersion) {
+    def parts = inputVersion.tokenize('.').collect { it as int }
+    while (parts.size() < 3) {
+        parts << 0
+    }
+    parts[2] = parts[2] + 1
+    if (parts[2] >= 10) {
+        parts[2] = 0
+        parts[1] = parts[1] + 1
+    }
+    return "${parts[0]}.${parts[1]}.${parts[2]}"
+}
+
+tasks.register('bumpModVersion') {
+    doLast {
+        def propsFile = file('gradle.properties')
+        def props = new Properties()
+        if (propsFile.exists()) {
+            propsFile.withInputStream { props.load(it) }
+        }
+
+        def current = (props.getProperty('modVersion') ?: project.version.toString()).trim()
+        def next = bumpPatchVersionString(current)
+        props.setProperty('modVersion', next)
+        propsFile.withOutputStream { props.store(it, null) }
+
+        def manifestPaths = [
+                file('src/main/resources/manifest.json')
+        ]
+        manifestPaths.each { mf ->
+            if (mf.exists()) {
+                def text = mf.getText('UTF-8')
+                text = text.replaceAll(/"Version"\s*:\s*"[0-9]+\.[0-9]+\.[0-9]+"/, "\"Version\": \"${next}\"")
+                mf.write(text, 'UTF-8')
+            }
+        }
+
+        println "Bumped mod version: ${current} -> ${next}"
+    }
+}
+
+tasks.register('deployToHytaleMods') {
+    dependsOn shadowJar
+    doLast {
+        def props = new Properties()
+        file('gradle.properties').withInputStream { props.load(it) }
+        def currentVersion = (props.getProperty('modVersion') ?: project.version.toString()).trim()
+        def jarName = "cobblestonezufall-${currentVersion}.jar"
+        def sourceJar = file("build/libs/${jarName}")
+        if (!sourceJar.exists()) {
+            throw new GradleException("Missing built jar: ${sourceJar}")
+        }
+        def targetDir = file("${System.properties['user.home']}\\AppData\\Roaming\\Hytale\\UserData\\Mods")
+        if (!targetDir.exists()) {
+            targetDir.mkdirs()
+        }
+        def backupDir = file("${targetDir.absolutePath}\\Backup")
+        if (!backupDir.exists()) {
+            backupDir.mkdirs()
+        }
+        copy {
+            from sourceJar
+            into targetDir
+        }
+        fileTree(targetDir).matching {
+            include "cobblestonezufall-*.jar"
+        }.files.each { f ->
+            if (f.name != jarName) {
+                copy {
+                    from f
+                    into backupDir
+                }
+                f.delete()
+            }
+        }
+        println "Deployed ${jarName} to ${targetDir}"
+    }
+}
+
+tasks.register('releaseMod') {
+    dependsOn 'bumpModVersion'
+    doLast {
+        def props = new Properties()
+        file('gradle.properties').withInputStream { props.load(it) }
+        def newVersion = props.getProperty('modVersion').trim()
+        println "Starting nested build for version ${newVersion}..."
+        exec {
+            commandLine 'cmd', '/c', 'gradlew.bat', 'clean', 'shadowJar', 'deployToHytaleMods', '-x', 'test'
+        }
+    }
+}
+
+// Debug task to verify JAR detection
+tasks.register('checkJar') {
+    doLast {
+        def serverDir = file('server')
+        if (serverDir.exists() && serverDir.isDirectory()) {
+            println "Server directory exists."
+            def jars = fileTree(dir: 'server', include: ['*.jar'])
+            if (jars.isEmpty()) {
+                println "WARNING: No JAR files found in server directory!"
+            } else {
+                jars.each { println "Found JAR: ${it.name}" }
+            }
+        } else {
+            println "WARNING: Server directory does not exist!"
+        }
+    }
+}
