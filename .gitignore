@@ -19,5 +19,6 @@ Backup/
 # Temporäre Dateien & Kompiliertes
 *.class
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.log
 .DS_Store
