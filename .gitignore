@@ -1,0 +1,23 @@
+# Gradle & Build
+.gradle/
+build/
+out/
+bin/
+
+# IDE (IntelliJ)
+.idea/
+*.iml
+*.iws
+
+# Hytale Server & Fremde Mods (WICHTIG!)
+server/
+dev/
+libs/
+user/
+Backup/
+
+# Temporäre Dateien & Kompiliertes
+*.class
+*.jar
+*.log
+.DS_Store

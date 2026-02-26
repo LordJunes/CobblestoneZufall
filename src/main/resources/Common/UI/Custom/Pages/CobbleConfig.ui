@@ -1,0 +1,79 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@Container {
+    Anchor: (Width: 1180, Height: 940);
+
+    #Title {
+      $C.@Title { @Text = ""; }
+      Label #PageTitle {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 22, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center);
+        Anchor: (Height: 34);
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Left: 20, Right: 20, Top: 14, Bottom: 14);
+
+      Label #TierInfo {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #9fd1ff, RenderBold: true);
+        Anchor: (Height: 24, Bottom: 4);
+      }
+
+      Label #TierMeta {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #cfd8e7);
+        Anchor: (Height: 20, Bottom: 8);
+      }
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Height: 38, Bottom: 8);
+        TextButton #OpenModelButton { Anchor: (Width: 170, Height: 32, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "CURVE MODEL"; }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9fd1ff, RenderBold: true); Text: "Block Delay"; Anchor: (Width: 76); }
+        $C.@TextField #RegenDelayInput { Anchor: (Width: 100, Height: 30, Right: 6); }
+        TextButton #SaveRegenDelayButton { Anchor: (Width: 96, Height: 30, Right: 10); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "SAVE"; }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9fd1ff, RenderBold: true); Text: "Expected BPS"; Anchor: (Width: 86); }
+        $C.@TextField #ExpectedBpsInput { Anchor: (Width: 90, Height: 30, Right: 6); }
+        TextButton #SaveExpectedBpsButton { Anchor: (Width: 96, Height: 30, Right: 10); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "SAVE"; }
+        TextButton #AutoCollectToggleButton { Anchor: (Width: 170, Height: 32, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "AUTO COLLECT"; }
+        TextButton #RangeTypeButton { Anchor: (Width: 170, Height: 32); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "RangeTyp: 100ms"; }
+      }
+
+      Group #HeaderRow {
+        LayoutMode: Left;
+        Anchor: (Height: 28, Bottom: 4);
+        Background: (Color: #2e3946(0.9));
+        Padding: (Left: 8, Right: 8);
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #ffffff, RenderBold: true); Text: "Block"; FlexWeight: 1; }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #ffffff, RenderBold: true); Text: "Drop"; Anchor: (Width: 120); }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #ffffff, RenderBold: true); Text: "Pay"; Anchor: (Width: 140); }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #ffffff, RenderBold: true); Text: "Repair (Chance/Amount)"; Anchor: (Width: 210); }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #ffffff, RenderBold: true); Text: "Action"; Anchor: (Width: 120); }
+      }
+
+      Group #Entries {
+        LayoutMode: TopScrolling;
+        Anchor: (Height: 760, Bottom: 8);
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Padding: (Right: 6);
+
+        Group #Entry0  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry0Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry0Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry0Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry0Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry0Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry0Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry1  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry1Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry1Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry1Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry1Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry1Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry1Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry2  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry2Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry2Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry2Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry2Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry2Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry2Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry3  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry3Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry3Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry3Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry3Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry3Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry3Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry4  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry4Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry4Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry4Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry4Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry4Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry4Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry5  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry5Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry5Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry5Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry5Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry5Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry5Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry6  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry6Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry6Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry6Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry6Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry6Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry6Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry7  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry7Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry7Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry7Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry7Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry7Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry7Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry8  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry8Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry8Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry8Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry8Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry8Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry8Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry9  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry9Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry9Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry9Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry9Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry9Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry9Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry10 { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry10Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry10Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry10Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry10Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry10Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry10Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+        Group #Entry11 { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry11Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry11Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } Label #Entry11Drop { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd1ff); Anchor: (Width: 120); } Label #Entry11Pay { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9fd89f); Anchor: (Width: 140); } Label #Entry11Repair { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffd7a8); Anchor: (Width: 210); } TextButton #Entry11Edit { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; } }
+      }
+    }
+  }
+}

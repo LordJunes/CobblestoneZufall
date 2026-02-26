@@ -1,0 +1,706 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@Container {
+    Anchor: (Width: 1210, Height: 700);
+
+    #Title {
+      $C.@Title { @Text = ""; }
+      Label #PageTitle {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 22, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center);
+        Anchor: (Height: 34);
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Left: 14, Right: 14, Top: 12, Bottom: 12);
+
+      Label #TierLabel {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #9ed9ff, RenderBold: true, HorizontalAlignment: Center);
+        Anchor: (Height: 28, Bottom: 4);
+      }
+
+      Label #TierCompare {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #c7d7e7, HorizontalAlignment: Center);
+        Anchor: (Height: 22, Bottom: 8);
+      }
+
+      Label #RowsHeader {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #a9dcff, RenderBold: true);
+        Anchor: (Height: 20, Bottom: 4);
+      }
+
+      Group #TableHeader {
+        LayoutMode: Left;
+        Anchor: (Height: 30, Bottom: 4);
+        Background: (Color: #263546(0.95));
+        Padding: (Left: 8, Right: 8);
+
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff, RenderBold: true); Text: "Resource"; Anchor: (Width: 210); }
+        Label #ColChance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 150); }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+        Label #ColNext { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 180); }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+        Label #ColMin { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 170); }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+        Label #ColHour { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 170); }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+        Label #ColDay { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 170); }
+      }
+
+      Group #Rows {
+        LayoutMode: TopScrolling;
+        Anchor: (Height: 330, Bottom: 8);
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Padding: (Right: 4);
+        Group #Row0 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row0Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row0Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row0Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row0NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row0NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row0NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row0NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row0MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row0MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row0MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row0MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row0HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row0HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row0HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row0HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row0DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row0DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row0DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row0DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row1 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row1Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row1Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row1Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row1NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row1NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row1NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row1NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row1MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row1MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row1MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row1MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row1HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row1HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row1HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row1HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row1DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row1DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row1DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row1DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row2 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row2Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row2Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row2Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row2NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row2NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row2NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row2NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row2MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row2MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row2MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row2MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row2HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row2HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row2HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row2HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row2DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row2DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row2DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row2DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row3 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row3Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row3Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row3Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row3NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row3NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row3NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row3NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row3MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row3MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row3MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row3MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row3HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row3HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row3HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row3HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row3DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row3DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row3DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row3DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row4 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row4Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row4Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row4Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row4NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row4NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row4NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row4NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row4MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row4MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row4MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row4MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row4HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row4HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row4HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row4HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row4DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row4DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row4DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row4DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row5 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row5Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row5Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row5Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row5NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row5NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row5NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row5NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row5MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row5MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row5MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row5MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row5HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row5HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row5HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row5HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row5DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row5DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row5DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row5DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row6 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row6Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row6Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row6Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row6NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row6NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row6NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row6NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row6MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row6MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row6MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row6MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row6HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row6HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row6HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row6HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row6DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row6DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row6DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row6DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row7 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row7Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row7Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row7Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row7NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row7NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row7NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row7NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row7MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row7MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row7MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row7MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row7HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row7HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row7HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row7HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row7DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row7DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row7DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row7DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row8 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row8Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row8Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row8Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row8NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row8NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row8NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row8NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row8MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row8MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row8MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row8MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row8HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row8HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row8HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row8HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row8DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row8DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row8DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row8DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row9 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row9Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row9Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row9Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row9NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row9NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row9NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row9NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row9MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row9MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row9MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row9MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row9HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row9HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row9HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row9HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row9DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row9DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row9DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row9DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row10 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row10Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row10Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row10Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row10NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row10NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row10NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row10NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row10MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row10MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row10MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row10MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row10HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row10HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row10HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row10HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row10DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row10DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row10DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row10DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+        Group #Row11 {
+          LayoutMode: Left;
+          Anchor: (Height: 32, Bottom: 3);
+          Padding: (Left: 8, Right: 8);
+          Background: (Color: #131d28(0.86));
+
+          ItemIcon #Row11Icon { Anchor: (Width: 22, Height: 22, Right: 8); }
+          Label #Row11Name { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff); Anchor: (Width: 180); }
+          Label #Row11Chance { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff, HorizontalAlignment: Center); Anchor: (Width: 150); }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 180);
+            Label #Row11NextBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d6e6ff); Anchor: (Width: 84); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row11NextPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row11NextNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 74); }
+            Label #Row11NextZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 74); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row11MinBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row11MinPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row11MinNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row11MinZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row11HourBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row11HourPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row11HourNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row11HourZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+          Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #4f6077, HorizontalAlignment: Center); Text: "|"; Anchor: (Width: 8); }
+          Group { LayoutMode: Left; Anchor: (Width: 170);
+            Label #Row11DayBase { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #cfd9e6); Anchor: (Width: 96); }
+            Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Text: "   "; Anchor: (Width: 16); }
+            Label #Row11DayPos { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #70ff70, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row11DayNeg { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff7070, RenderBold: true); Anchor: (Width: 58); }
+            Label #Row11DayZero { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb1c9); Anchor: (Width: 58); }
+          }
+        }
+      }
+
+      Group #ActionSlot {
+        Anchor: (Height: 92, Bottom: 8);
+        Background: (Color: #1a2432(0.75));
+        Padding: (Left: 10, Right: 10, Top: 8, Bottom: 8);
+
+        Group #UpgradePrompt {
+          Anchor: (Full: 0);
+          LayoutMode: Top;
+          Visible: false;
+          Label #PromptText { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d6e6ff, HorizontalAlignment: Center, Wrap: true); Anchor: (Height: 28, Bottom: 6); }
+          Group { LayoutMode: Center; Anchor: (Height: 32);
+            TextButton #PromptBuyButton { Anchor: (Width: 180, Height: 30, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; }
+            TextButton #PromptCancelButton { Anchor: (Width: 140, Height: 30); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; }
+          }
+        }
+
+        Group #UpgradeConfirm {
+          Anchor: (Full: 0);
+          LayoutMode: Top;
+          Visible: false;
+          Label #ConfirmText { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d6e6ff, HorizontalAlignment: Center, Wrap: true); Anchor: (Height: 44, Bottom: 6); }
+          Group { LayoutMode: Center; Anchor: (Height: 32);
+            TextButton #ConfirmBuyButton { Anchor: (Width: 180, Height: 30, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; }
+            TextButton #ConfirmCancelButton { Anchor: (Width: 140, Height: 30); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; }
+          }
+        }
+      }
+
+      Label #YieldInfo {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 20, TextColor: #7dd8ff, HorizontalAlignment: Center, Wrap: true);
+        Anchor: (Height: 30, Bottom: 8);
+      }
+
+      Group {
+        LayoutMode: Center;
+        Anchor: (Height: 42, Bottom: 6);
+
+        TextButton #UpgradeButtonEnabled {
+          Anchor: (Width: 250, Height: 36, Right: 8);
+          Background: (Color: #285f34);
+          Style: TextButtonStyle(
+            Default: (
+              LabelStyle: (
+                TextColor: #c7ffd1,
+                RenderBold: true,
+                FontSize: 15,
+                HorizontalAlignment: Center,
+                VerticalAlignment: Center
+              )
+            ),
+            Hovered: (
+              Background: (Color: #2f7a40),
+              LabelStyle: (
+                TextColor: #e4ffe8,
+                RenderBold: true,
+                FontSize: 15,
+                HorizontalAlignment: Center,
+                VerticalAlignment: Center
+              )
+            ),
+            Pressed: (
+              Background: (Color: #224f2d),
+              LabelStyle: (
+                TextColor: #a9f7b6,
+                RenderBold: true,
+                FontSize: 15,
+                HorizontalAlignment: Center,
+                VerticalAlignment: Center
+              )
+            ),
+            Disabled: (
+              Background: (Color: #1a3121),
+              LabelStyle: (
+                TextColor: #5f7a65,
+                RenderBold: true,
+                FontSize: 15,
+                HorizontalAlignment: Center,
+                VerticalAlignment: Center
+              )
+            ),
+            Sounds: $Sounds.@ButtonsLight
+          );
+          Text: "";
+        }
+        TextButton #UpgradeButtonDisabled {
+          Anchor: (Width: 250, Height: 36, Right: 8);
+          Background: (Color: #612b2b);
+          Style: TextButtonStyle(
+            Default: (
+              LabelStyle: (
+                TextColor: #ffd2d2,
+                RenderBold: true,
+                FontSize: 15,
+                HorizontalAlignment: Center,
+                VerticalAlignment: Center
+              )
+            ),
+            Hovered: (
+              Background: (Color: #7d3737),
+              LabelStyle: (
+                TextColor: #ffe6e6,
+                RenderBold: true,
+                FontSize: 15,
+                HorizontalAlignment: Center,
+                VerticalAlignment: Center
+              )
+            ),
+            Pressed: (
+              Background: (Color: #502323),
+              LabelStyle: (
+                TextColor: #ffb3b3,
+                RenderBold: true,
+                FontSize: 15,
+                HorizontalAlignment: Center,
+                VerticalAlignment: Center
+              )
+            ),
+            Disabled: (
+              Background: (Color: #341919),
+              LabelStyle: (
+                TextColor: #7a5f5f,
+                RenderBold: true,
+                FontSize: 15,
+                HorizontalAlignment: Center,
+                VerticalAlignment: Center
+              )
+            ),
+            Sounds: $Sounds.@ButtonsLight
+          );
+          Text: "";
+        }
+        TextButton #ProjectionPrevButton { Anchor: (Width: 70, Height: 36, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; }
+        TextButton #ProjectionButton { Anchor: (Width: 196, Height: 36, Right: 6); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; }
+        TextButton #ProjectionNextButton { Anchor: (Width: 70, Height: 36, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; }
+        TextButton #CloseButton { Anchor: (Width: 120, Height: 36); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ""; }
+      }
+    }
+  }
+}
+
+

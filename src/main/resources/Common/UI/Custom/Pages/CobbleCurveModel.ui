@@ -1,0 +1,102 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@Container {
+    Anchor: (Width: 1180, Height: 980);
+
+    #Title {
+      $C.@Title { @Text = ""; }
+      Label {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 22, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center);
+        Text: "Cobblestone Curve Model";
+        Anchor: (Height: 34);
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Left: 20, Right: 20, Top: 14, Bottom: 14);
+
+      Label {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9fd1ff);
+        Text: "Set Start/End values, choose curve modes, then Save/Show/Apply.";
+        Anchor: (Height: 20, Bottom: 8);
+      }
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Height: 36, Bottom: 6);
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d5ffd5, RenderBold: true); Text: "Max Level"; Anchor: (Width: 74); }
+        $C.@TextField #MaxTierInput { Anchor: (Width: 120, Height: 30, Right: 10); }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d5ffd5, RenderBold: true); Text: "Max Cost"; Anchor: (Width: 62); }
+        $C.@TextField #MaxCostInput { Anchor: (Width: 190, Height: 30); }
+      }
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Height: 36, Bottom: 6);
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9fc4ff, RenderBold: true); Text: "Chance Curve"; Anchor: (Width: 90); }
+        TextButton #ChanceModePrevButton { Anchor: (Width: 32, Height: 30, Right: 4); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "<"; }
+        Label #ChanceModeValue { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff, RenderBold: true); Anchor: (Width: 170, Height: 30, Right: 4); }
+        TextButton #ChanceModeNextButton { Anchor: (Width: 32, Height: 30, Right: 10); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ">"; }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9fc4ff, RenderBold: true); Text: "Exponent"; Anchor: (Width: 64); }
+        $C.@TextField #ChanceExpInput { Anchor: (Width: 110, Height: 30); }
+      }
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Height: 36, Bottom: 8);
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffd7a8, RenderBold: true); Text: "Cost Curve"; Anchor: (Width: 90); }
+        TextButton #CostModePrevButton { Anchor: (Width: 32, Height: 30, Right: 4); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "<"; }
+        Label #CostModeValue { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffffff, RenderBold: true); Anchor: (Width: 170, Height: 30, Right: 4); }
+        TextButton #CostModeNextButton { Anchor: (Width: 32, Height: 30, Right: 10); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: ">"; }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffd7a8, RenderBold: true); Text: "Exponent"; Anchor: (Width: 64); }
+        $C.@TextField #CostExpInput { Anchor: (Width: 110, Height: 30); }
+      }
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Height: 28, Bottom: 4);
+        Background: (Color: #2e3946(0.9));
+        Padding: (Left: 8, Right: 8);
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #ffffff, RenderBold: true); Text: "Block"; FlexWeight: 1; }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #ffffff, RenderBold: true); Text: "Start %"; Anchor: (Width: 160); }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #ffffff, RenderBold: true); Text: "End %"; Anchor: (Width: 160); }
+      }
+
+      Group {
+        LayoutMode: Top;
+        Anchor: (Height: 360, Bottom: 8);
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); Label #Item0Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } $C.@TextField #Item0Start { Anchor: (Width: 160, Height: 30, Right: 8); } $C.@TextField #Item0End { Anchor: (Width: 160, Height: 30); } }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); Label #Item1Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } $C.@TextField #Item1Start { Anchor: (Width: 160, Height: 30, Right: 8); } $C.@TextField #Item1End { Anchor: (Width: 160, Height: 30); } }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); Label #Item2Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } $C.@TextField #Item2Start { Anchor: (Width: 160, Height: 30, Right: 8); } $C.@TextField #Item2End { Anchor: (Width: 160, Height: 30); } }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); Label #Item3Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } $C.@TextField #Item3Start { Anchor: (Width: 160, Height: 30, Right: 8); } $C.@TextField #Item3End { Anchor: (Width: 160, Height: 30); } }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); Label #Item4Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } $C.@TextField #Item4Start { Anchor: (Width: 160, Height: 30, Right: 8); } $C.@TextField #Item4End { Anchor: (Width: 160, Height: 30); } }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); Label #Item5Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } $C.@TextField #Item5Start { Anchor: (Width: 160, Height: 30, Right: 8); } $C.@TextField #Item5End { Anchor: (Width: 160, Height: 30); } }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); Label #Item6Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } $C.@TextField #Item6Start { Anchor: (Width: 160, Height: 30, Right: 8); } $C.@TextField #Item6End { Anchor: (Width: 160, Height: 30); } }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); Label #Item7Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } $C.@TextField #Item7Start { Anchor: (Width: 160, Height: 30, Right: 8); } $C.@TextField #Item7End { Anchor: (Width: 160, Height: 30); } }
+        Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 4); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); Label #Item8Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } $C.@TextField #Item8Start { Anchor: (Width: 160, Height: 30, Right: 8); } $C.@TextField #Item8End { Anchor: (Width: 160, Height: 30); } }
+      }
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Height: 20, Bottom: 8);
+        Label #StartTotalInfo { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9fd89f, RenderBold: true); Anchor: (Width: 300); }
+        Label #EndTotalInfo { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ffd7a8, RenderBold: true); Anchor: (Width: 300); }
+      }
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Height: 40);
+        TextButton #SaveModelButton { Anchor: (Width: 170, Height: 34, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "SAVE MODEL"; }
+        TextButton #ShowExampleButton { Anchor: (Width: 180, Height: 34, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "SHOW EXAMPLE"; }
+        TextButton #ApplyModelButton { Anchor: (Width: 210, Height: 34, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "APPLY TO LEVELS"; }
+        TextButton #BackButton { Anchor: (Width: 120, Height: 34, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "BACK"; }
+        TextButton #CloseButton { Anchor: (Width: 120, Height: 34); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "CLOSE"; }
+      }
+    }
+  }
+}
