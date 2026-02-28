@@ -5,6 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+<<<<<<< HEAD
+=======
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+>>>>>>> cd2cc2b (Prepare clean project state)
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,17 +22,34 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
+<<<<<<< HEAD
+=======
+import java.lang.reflect.Method;
+>>>>>>> cd2cc2b (Prepare clean project state)
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+<<<<<<< HEAD
 import java.util.UUID;
 import java.util.Collections;
 import java.util.Comparator;
 
 public class ConfigManager {
     private static final String CONFIG_FILE = "cobble_config.json";
+=======
+import java.util.LinkedHashMap;
+import java.util.UUID;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class ConfigManager {
+    private static final String CONFIG_FILE = "cobble_config.json";
+    private static final String UI_CONFIG_FILE = "cobble_ui_config.json";
+>>>>>>> cd2cc2b (Prepare clean project state)
     private static final String PLAYER_TABLE_FILE = "CobPlayerSaveTable.csv";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final int DEFAULT_MAX_TIER = 100;
@@ -53,6 +75,10 @@ public class ConfigManager {
     };
     private static final String CSV_DEFAULTS_RESOURCE = "/data/cob_levels.csv";
     private static volatile Map<Integer, CsvTierDefaults> cachedCsvDefaults;
+<<<<<<< HEAD
+=======
+    private static final Map<String, DropEntry> DROP_VALUE_DEFAULTS = createDropValueDefaults();
+>>>>>>> cd2cc2b (Prepare clean project state)
 
     public static class DropEntry {
         public String itemId;
@@ -81,8 +107,13 @@ public class ConfigManager {
             this.chance = chance;
             this.amount = Math.max(1, amount);
             this.payAmount = Math.max(0.0d, payAmount);
+<<<<<<< HEAD
             this.repairChance = Math.max(0.0d, repairChance);
             this.repairAmountPercent = Math.max(0.0d, repairAmountPercent);
+=======
+            this.repairChance = Math.max(0.0d, Math.min(100.0d, repairChance));
+            this.repairAmountPercent = Math.max(0.0d, Math.min(100.0d, repairAmountPercent));
+>>>>>>> cd2cc2b (Prepare clean project state)
         }
     }
 
@@ -120,6 +151,14 @@ public class ConfigManager {
         public int tier = 1;
     }
 
+<<<<<<< HEAD
+=======
+    public static class UiConfigData {
+        public int curveRowsPerPage = 9;
+        public int upgradeRowsVisible = 12;
+    }
+
+>>>>>>> cd2cc2b (Prepare clean project state)
     private static class CsvTierDefaults {
         final double price;
         final List<DropEntry> drops;
@@ -132,22 +171,40 @@ public class ConfigManager {
 
     public static class ConfigData {
         public int maxTier = DEFAULT_MAX_TIER;
+<<<<<<< HEAD
         public long regenDelayMs = 150L;
         public int autoCollectRange = 0;
         public boolean autoCollectToInventory = true;
         public int autoCollectRangeTypeMs = 100;
         public double expectedBlocksPerSecond = 3.0d;
+=======
+        public long regenDelayMs = 1000L;
+        public int autoCollectRange = 0;
+        public boolean autoCollectToInventory = true;
+        public int autoCollectRangeTypeMs = 100;
+        public double expectedBlocksPerSecond = 1.0d;
+        public boolean debugEnabled = false;
+>>>>>>> cd2cc2b (Prepare clean project state)
         public Map<String, TierConfig> tiers = new HashMap<>();
         public Map<String, PlayerTierData> players = new HashMap<>();
         public CurveModelConfig curveModel = new CurveModelConfig();
     }
 
     private ConfigData data = new ConfigData();
+<<<<<<< HEAD
+=======
+    private UiConfigData uiData = new UiConfigData();
+>>>>>>> cd2cc2b (Prepare clean project state)
 
     public synchronized void load() {
         File file = getConfigFile();
         if (!file.exists()) {
             ensureDefaults();
+<<<<<<< HEAD
+=======
+            ensureUiDefaults();
+            saveUiConfig();
+>>>>>>> cd2cc2b (Prepare clean project state)
             return;
         }
 
@@ -177,10 +234,18 @@ public class ConfigManager {
                 data = new ConfigData();
             }
             ensureDefaults();
+<<<<<<< HEAD
+=======
+            loadUiConfig();
+>>>>>>> cd2cc2b (Prepare clean project state)
             writePlayerSaveTable();
         } catch (IOException e) {
             e.printStackTrace();
             ensureDefaults();
+<<<<<<< HEAD
+=======
+            loadUiConfig();
+>>>>>>> cd2cc2b (Prepare clean project state)
             writePlayerSaveTable();
         }
     }
@@ -194,12 +259,65 @@ public class ConfigManager {
 
         try (Writer writer = new FileWriter(file)) {
             GSON.toJson(data, writer);
+<<<<<<< HEAD
+=======
+            saveUiConfig();
+>>>>>>> cd2cc2b (Prepare clean project state)
             writePlayerSaveTable();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+<<<<<<< HEAD
+=======
+    private synchronized void ensureUiDefaults() {
+        if (uiData == null) {
+            uiData = new UiConfigData();
+        }
+        if (uiData.curveRowsPerPage < 1) {
+            uiData.curveRowsPerPage = 1;
+        } else if (uiData.curveRowsPerPage > 9) {
+            uiData.curveRowsPerPage = 9;
+        }
+        if (uiData.upgradeRowsVisible < 1) {
+            uiData.upgradeRowsVisible = 1;
+        } else if (uiData.upgradeRowsVisible > 12) {
+            uiData.upgradeRowsVisible = 12;
+        }
+    }
+
+    private synchronized void loadUiConfig() {
+        File file = getUiConfigFile();
+        if (!file.exists()) {
+            ensureUiDefaults();
+            saveUiConfig();
+            return;
+        }
+        try (Reader reader = new FileReader(file)) {
+            UiConfigData loaded = GSON.fromJson(reader, UiConfigData.class);
+            uiData = loaded == null ? new UiConfigData() : loaded;
+        } catch (IOException e) {
+            uiData = new UiConfigData();
+        }
+        ensureUiDefaults();
+        saveUiConfig();
+    }
+
+    private synchronized void saveUiConfig() {
+        ensureUiDefaults();
+        File file = getUiConfigFile();
+        File parent = file.getParentFile();
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs();
+        }
+        try (Writer writer = new FileWriter(file)) {
+            GSON.toJson(uiData, writer);
+        } catch (IOException ignored) {
+        }
+    }
+
+>>>>>>> cd2cc2b (Prepare clean project state)
     private synchronized void ensureDefaults() {
         if (data == null) {
             data = new ConfigData();
@@ -216,8 +334,15 @@ public class ConfigManager {
         if (data.players == null) {
             data.players = new HashMap<>();
         }
+<<<<<<< HEAD
         if (data.regenDelayMs < 1L) {
             data.regenDelayMs = 150L;
+=======
+        if (data.regenDelayMs < 0L) {
+            data.regenDelayMs = 1000L;
+        } else if (data.regenDelayMs == 150L) {
+            data.regenDelayMs = 1000L;
+>>>>>>> cd2cc2b (Prepare clean project state)
         }
         if (data.autoCollectRange < 0) {
             data.autoCollectRange = 0;
@@ -226,6 +351,7 @@ public class ConfigManager {
             // Legacy migration: old ON/OFF -> range based collection.
             data.autoCollectRange = 6;
         }
+<<<<<<< HEAD
         if (data.autoCollectRangeTypeMs != -1) {
             if (data.autoCollectRangeTypeMs < 100) {
                 data.autoCollectRangeTypeMs = 100;
@@ -240,6 +366,22 @@ public class ConfigManager {
         }
         if (data.expectedBlocksPerSecond < 0.0d) {
             data.expectedBlocksPerSecond = 0.0d;
+=======
+        if (data.autoCollectRangeTypeMs < 0) {
+            data.autoCollectRangeTypeMs = 0;
+        }
+        if (data.autoCollectRangeTypeMs > 5000) {
+            data.autoCollectRangeTypeMs = 5000;
+        }
+        data.autoCollectRangeTypeMs = (data.autoCollectRangeTypeMs / 100) * 100;
+        if (data.autoCollectRangeTypeMs < 0) {
+            data.autoCollectRangeTypeMs = 0;
+        }
+        if (data.expectedBlocksPerSecond < 0.0d) {
+            data.expectedBlocksPerSecond = 0.0d;
+        } else if (Math.abs(data.expectedBlocksPerSecond - 3.0d) < 1e-9d) {
+            data.expectedBlocksPerSecond = 1.0d;
+>>>>>>> cd2cc2b (Prepare clean project state)
         }
         if (data.curveModel == null) {
             data.curveModel = new CurveModelConfig();
@@ -264,9 +406,22 @@ public class ConfigManager {
                 if (drop.repairChance < 0.0d) {
                     drop.repairChance = 0.0d;
                 }
+<<<<<<< HEAD
                 if (drop.repairAmountPercent < 0.0d) {
                     drop.repairAmountPercent = 0.0d;
                 }
+=======
+                if (drop.repairChance > 100.0d) {
+                    drop.repairChance = 100.0d;
+                }
+                if (drop.repairAmountPercent < 0.0d) {
+                    drop.repairAmountPercent = 0.0d;
+                }
+                if (drop.repairAmountPercent > 100.0d) {
+                    drop.repairAmountPercent = 100.0d;
+                }
+                applyValueDefaults(drop);
+>>>>>>> cd2cc2b (Prepare clean project state)
             }
         }
     }
@@ -286,19 +441,30 @@ public class ConfigManager {
         }
         model.chanceMode = normalizeMode(model.chanceMode);
         model.costMode = normalizeMode(model.costMode);
+<<<<<<< HEAD
         if (model.items == null) {
             model.items = new ArrayList<>();
         }
         if (model.items.isEmpty()) {
+=======
+        if (model.items == null || model.items.isEmpty()) {
+            model.items = new ArrayList<>();
+>>>>>>> cd2cc2b (Prepare clean project state)
             for (int i = 0; i < DEFAULT_ITEMS.length; i++) {
                 model.items.add(new CurveItemConfig(DEFAULT_ITEMS[i], DEFAULT_START_VALUES[i], DEFAULT_TARGET_VALUES[i]));
             }
         } else {
+<<<<<<< HEAD
             Map<String, CurveItemConfig> byId = new HashMap<>();
+=======
+            List<CurveItemConfig> normalized = new ArrayList<>();
+            Map<String, Boolean> seen = new HashMap<>();
+>>>>>>> cd2cc2b (Prepare clean project state)
             for (CurveItemConfig item : model.items) {
                 if (item == null || item.itemId == null || item.itemId.isBlank()) {
                     continue;
                 }
+<<<<<<< HEAD
                 byId.put(item.itemId, item);
             }
             List<CurveItemConfig> normalized = new ArrayList<>();
@@ -309,6 +475,19 @@ public class ConfigManager {
                     normalized.add(new CurveItemConfig(itemId, DEFAULT_START_VALUES[i], DEFAULT_TARGET_VALUES[i]));
                 } else {
                     normalized.add(new CurveItemConfig(itemId, existing.startChance, existing.endChance));
+=======
+                String id = item.itemId.trim();
+                String key = id.toLowerCase(Locale.ROOT);
+                if (seen.containsKey(key)) {
+                    continue;
+                }
+                seen.put(key, true);
+                normalized.add(new CurveItemConfig(id, Math.max(0.0d, item.startChance), Math.max(0.0d, item.endChance)));
+            }
+            if (normalized.isEmpty()) {
+                for (int i = 0; i < DEFAULT_ITEMS.length; i++) {
+                    normalized.add(new CurveItemConfig(DEFAULT_ITEMS[i], DEFAULT_START_VALUES[i], DEFAULT_TARGET_VALUES[i]));
+>>>>>>> cd2cc2b (Prepare clean project state)
                 }
             }
             model.items = normalized;
@@ -337,12 +516,20 @@ public class ConfigManager {
 
     public synchronized long getRegenDelayMs() {
         ensureDefaults();
+<<<<<<< HEAD
         return Math.max(1L, data.regenDelayMs);
+=======
+        return Math.max(0L, data.regenDelayMs);
+>>>>>>> cd2cc2b (Prepare clean project state)
     }
 
     public synchronized void setRegenDelayMs(long regenDelayMs) {
         ensureDefaults();
+<<<<<<< HEAD
         data.regenDelayMs = Math.max(1L, regenDelayMs);
+=======
+        data.regenDelayMs = Math.max(0L, regenDelayMs);
+>>>>>>> cd2cc2b (Prepare clean project state)
         save();
     }
 
@@ -372,11 +559,16 @@ public class ConfigManager {
 
     public synchronized int getAutoCollectRangeTypeMs() {
         ensureDefaults();
+<<<<<<< HEAD
         return data.autoCollectRangeTypeMs == -1 ? -1 : Math.max(100, Math.min(5000, data.autoCollectRangeTypeMs));
+=======
+        return Math.max(0, Math.min(5000, data.autoCollectRangeTypeMs));
+>>>>>>> cd2cc2b (Prepare clean project state)
     }
 
     public synchronized void setAutoCollectRangeTypeMs(int value) {
         ensureDefaults();
+<<<<<<< HEAD
         if (value == -1) {
             data.autoCollectRangeTypeMs = -1;
             save();
@@ -386,6 +578,12 @@ public class ConfigManager {
         clamped = (clamped / 100) * 100;
         if (clamped < 100) {
             clamped = 100;
+=======
+        int clamped = Math.max(0, Math.min(5000, value));
+        clamped = (clamped / 100) * 100;
+        if (clamped < 0) {
+            clamped = 0;
+>>>>>>> cd2cc2b (Prepare clean project state)
         }
         data.autoCollectRangeTypeMs = clamped;
         save();
@@ -402,6 +600,42 @@ public class ConfigManager {
         save();
     }
 
+<<<<<<< HEAD
+=======
+    public synchronized boolean isDebugEnabled() {
+        ensureDefaults();
+        return data.debugEnabled;
+    }
+
+    public synchronized void setDebugEnabled(boolean enabled) {
+        ensureDefaults();
+        data.debugEnabled = enabled;
+        save();
+    }
+
+    public synchronized int getCurveRowsPerPage() {
+        ensureUiDefaults();
+        return uiData.curveRowsPerPage;
+    }
+
+    public synchronized int getUpgradeRowsVisible() {
+        ensureUiDefaults();
+        return uiData.upgradeRowsVisible;
+    }
+
+    public synchronized void setCurveRowsPerPage(int value) {
+        ensureUiDefaults();
+        uiData.curveRowsPerPage = Math.max(1, Math.min(9, value));
+        saveUiConfig();
+    }
+
+    public synchronized void setUpgradeRowsVisible(int value) {
+        ensureUiDefaults();
+        uiData.upgradeRowsVisible = Math.max(1, Math.min(12, value));
+        saveUiConfig();
+    }
+
+>>>>>>> cd2cc2b (Prepare clean project state)
     public synchronized void setMaxTier(int maxTier) {
         ensureDefaults();
         data.maxTier = Math.max(1, maxTier);
@@ -547,7 +781,13 @@ public class ConfigManager {
         }
         List<DropEntry> out = new ArrayList<>(cfg.drops.size());
         for (DropEntry drop : cfg.drops) {
+<<<<<<< HEAD
             out.add(copyDrop(drop));
+=======
+            DropEntry copied = copyDrop(drop);
+            applyValueDefaults(copied);
+            out.add(copied);
+>>>>>>> cd2cc2b (Prepare clean project state)
         }
         return out;
     }
@@ -611,14 +851,26 @@ public class ConfigManager {
             if (drop.itemId.trim().toLowerCase(Locale.ROOT).equals(normalized)) {
                 drop.amount = Math.max(1, amount);
                 drop.payAmount = Math.max(0.0d, payAmount);
+<<<<<<< HEAD
                 drop.repairChance = Math.max(0.0d, repairChance);
                 drop.repairAmountPercent = Math.max(0.0d, repairAmountPercent);
+=======
+                drop.repairChance = Math.max(0.0d, Math.min(100.0d, repairChance));
+                drop.repairAmountPercent = Math.max(0.0d, Math.min(100.0d, repairAmountPercent));
+                applyValueDefaults(drop);
+>>>>>>> cd2cc2b (Prepare clean project state)
                 save();
                 return;
             }
         }
         if (itemId != null && !itemId.isBlank()) {
+<<<<<<< HEAD
             cfg.drops.add(new DropEntry(itemId, 0.0d, amount, payAmount, repairChance, repairAmountPercent));
+=======
+            DropEntry created = new DropEntry(itemId, 0.0d, amount, payAmount, repairChance, repairAmountPercent);
+            applyValueDefaults(created);
+            cfg.drops.add(created);
+>>>>>>> cd2cc2b (Prepare clean project state)
             save();
         }
     }
@@ -682,6 +934,16 @@ public class ConfigManager {
                 return true;
             }
         }
+<<<<<<< HEAD
+=======
+        if (data != null && data.curveModel != null && data.curveModel.items != null) {
+            for (CurveItemConfig item : data.curveModel.items) {
+                if (item != null && item.itemId != null && item.itemId.trim().toLowerCase(Locale.ROOT).equals(normalized)) {
+                    return true;
+                }
+            }
+        }
+>>>>>>> cd2cc2b (Prepare clean project state)
         for (TierConfig cfg : data.tiers.values()) {
             if (cfg == null || cfg.drops == null) {
                 continue;
@@ -695,6 +957,268 @@ public class ConfigManager {
         return false;
     }
 
+<<<<<<< HEAD
+=======
+    public synchronized List<String> getManagedBlockIds() {
+        ensureDefaults();
+        List<String> out = new ArrayList<>();
+        if (data.curveModel != null && data.curveModel.items != null) {
+            for (CurveItemConfig item : data.curveModel.items) {
+                if (item == null || item.itemId == null || item.itemId.isBlank()) {
+                    continue;
+                }
+                out.add(item.itemId.trim());
+            }
+        }
+        return out;
+    }
+
+    public synchronized List<String> getAutocompleteBlockIds() {
+        return getAllBlockIds();
+    }
+
+    public synchronized List<String> getAllBlockIds() {
+        ensureDefaults();
+        Set<String> sorted = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        for (String id : DEFAULT_ITEMS) {
+            if (id != null && !id.isBlank()) {
+                sorted.add(id.trim());
+            }
+        }
+        if (data.curveModel != null && data.curveModel.items != null) {
+            for (CurveItemConfig item : data.curveModel.items) {
+                if (item != null && item.itemId != null && !item.itemId.isBlank()) {
+                    sorted.add(item.itemId.trim());
+                }
+            }
+        }
+        for (TierConfig cfg : data.tiers.values()) {
+            if (cfg == null || cfg.drops == null) {
+                continue;
+            }
+            for (DropEntry drop : cfg.drops) {
+                if (drop != null && drop.itemId != null && !drop.itemId.isBlank()) {
+                    sorted.add(drop.itemId.trim());
+                }
+            }
+        }
+        try {
+            for (Map.Entry<String, BlockType> e : BlockType.getAssetMap().getAssetMap().entrySet()) {
+                addIfUsableId(sorted, e.getKey());
+                BlockType bt = e.getValue();
+                if (bt != null) {
+                    addIfUsableId(sorted, bt.getId());
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        try {
+            for (Map.Entry<String, Item> e : Item.getAssetMap().getAssetMap().entrySet()) {
+                Item item = e.getValue();
+                if (item != null) {
+                    addIfUsableId(sorted, item.getBlockId());
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return new ArrayList<>(sorted);
+    }
+
+    private static void addIfUsableId(Set<String> out, String rawId) {
+        if (rawId == null) {
+            return;
+        }
+        String id = rawId.trim();
+        if (id.isBlank()) {
+            return;
+        }
+        if (id.startsWith("*") || id.contains("/") || id.contains(" ")) {
+            return;
+        }
+        if (!id.matches("[A-Za-z0-9_\\-:\\.]+")) {
+            return;
+        }
+        out.add(id);
+    }
+
+    private static void addAssetIds(Set<String> out, Object assetMap) {
+        if (assetMap == null) {
+            return;
+        }
+
+        // Try common APIs that expose IDs directly.
+        for (String methodName : new String[]{"getAssetIds", "getIds", "keys", "keySet", "getKeys"}) {
+            try {
+                Method method = assetMap.getClass().getMethod(methodName);
+                Object ids = method.invoke(assetMap);
+                addStringish(out, ids);
+            } catch (Exception ignored) {
+            }
+        }
+
+        // Try common APIs that expose asset objects, then read getId().
+        for (String methodName : new String[]{"getAssets", "values", "getAllAssets"}) {
+            try {
+                Method method = assetMap.getClass().getMethod(methodName);
+                Object assets = method.invoke(assetMap);
+                addAssetObjects(out, assets);
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void addStringish(Set<String> out, Object value) {
+        if (value == null) {
+            return;
+        }
+        if (value instanceof Map<?, ?> map) {
+            for (Object key : map.keySet()) {
+                if (key != null) {
+                    String s = String.valueOf(key).trim();
+                    if (!s.isBlank()) {
+                        out.add(s);
+                    }
+                }
+            }
+            return;
+        }
+        if (value instanceof Iterable<?> iterable) {
+            for (Object e : iterable) {
+                if (e != null) {
+                    String s = String.valueOf(e).trim();
+                    if (!s.isBlank()) {
+                        out.add(s);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void addAssetObjects(Set<String> out, Object value) {
+        if (!(value instanceof Iterable<?> iterable)) {
+            return;
+        }
+        for (Object asset : iterable) {
+            if (asset == null) {
+                continue;
+            }
+            try {
+                Method idMethod = asset.getClass().getMethod("getId");
+                Object idObj = idMethod.invoke(asset);
+                if (idObj != null) {
+                    String id = String.valueOf(idObj).trim();
+                    if (!id.isBlank()) {
+                        out.add(id);
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    public synchronized boolean addManagedBlock(String itemId) {
+        ensureDefaults();
+        String normalized = normalizeId(itemId);
+        if (normalized == null) {
+            return false;
+        }
+        boolean changed = false;
+
+        if (data.curveModel.items == null) {
+            data.curveModel.items = new ArrayList<>();
+        }
+        boolean inCurve = false;
+        for (CurveItemConfig item : data.curveModel.items) {
+            if (item != null && item.itemId != null && item.itemId.trim().equalsIgnoreCase(normalized)) {
+                inCurve = true;
+                break;
+            }
+        }
+        if (!inCurve) {
+            data.curveModel.items.add(new CurveItemConfig(normalized, 0.0d, 0.0d));
+            changed = true;
+        }
+
+        DropEntry template = getDefaultValueTemplate(normalized);
+        for (int tier = 1; tier <= data.maxTier; tier++) {
+            TierConfig cfg = getTierConfig(tier, true);
+            if (cfg.drops == null) {
+                cfg.drops = new ArrayList<>();
+            }
+            if (cfg.drops.isEmpty()) {
+                cfg.drops.addAll(getCalculatedDropsForTier(tier));
+            }
+            boolean exists = false;
+            for (DropEntry drop : cfg.drops) {
+                if (drop != null && drop.itemId != null && drop.itemId.trim().equalsIgnoreCase(normalized)) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                cfg.drops.add(new DropEntry(normalized, 0.0d, 1, template.payAmount, template.repairChance, template.repairAmountPercent));
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            save();
+        }
+        return changed;
+    }
+
+    public synchronized boolean removeManagedBlock(String itemId) {
+        ensureDefaults();
+        String normalized = normalizeId(itemId);
+        if (normalized == null) {
+            return false;
+        }
+        if (data.curveModel == null || data.curveModel.items == null || data.curveModel.items.size() <= 1) {
+            return false;
+        }
+
+        boolean changed = false;
+        int before = data.curveModel.items.size();
+        data.curveModel.items.removeIf(item -> item != null && item.itemId != null && item.itemId.trim().equalsIgnoreCase(normalized));
+        if (data.curveModel.items.size() != before) {
+            changed = true;
+        }
+        if (data.curveModel.items.isEmpty()) {
+            // Safety: never keep curve list empty.
+            data.curveModel.items.add(new CurveItemConfig(DEFAULT_ITEMS[0], 100.0d, 100.0d));
+            changed = true;
+        }
+
+        for (TierConfig cfg : data.tiers.values()) {
+            if (cfg == null || cfg.drops == null) {
+                continue;
+            }
+            int dropBefore = cfg.drops.size();
+            cfg.drops.removeIf(drop -> drop != null && drop.itemId != null && drop.itemId.trim().equalsIgnoreCase(normalized));
+            if (cfg.drops.size() != dropBefore) {
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            save();
+        }
+        return changed;
+    }
+
+    private static String normalizeId(String itemId) {
+        if (itemId == null) {
+            return null;
+        }
+        String id = itemId.trim();
+        if (id.isBlank()) {
+            return null;
+        }
+        return id;
+    }
+
+>>>>>>> cd2cc2b (Prepare clean project state)
     public synchronized String getRandomDropForTier(int tier) {
         List<DropEntry> drops = getDropsForTier(tier);
         if (drops.isEmpty()) {
@@ -790,7 +1314,13 @@ public class ConfigManager {
     private static List<DropEntry> buildDropsFromCurveModel(CurveModelConfig model, double factor) {
         List<DropEntry> generated = new ArrayList<>();
         if (model.items == null || model.items.isEmpty()) {
+<<<<<<< HEAD
             generated.add(new DropEntry("Rock_Stone_Cobble", 100.0d, 1));
+=======
+            DropEntry fallback = new DropEntry("Rock_Stone_Cobble", 100.0d, 1);
+            applyValueDefaults(fallback);
+            generated.add(fallback);
+>>>>>>> cd2cc2b (Prepare clean project state)
             return generated;
         }
 
@@ -803,7 +1333,13 @@ public class ConfigManager {
             total += raw[i];
         }
         if (total <= 0.0d) {
+<<<<<<< HEAD
             generated.add(new DropEntry("Rock_Stone_Cobble", 100.0d, 1));
+=======
+            DropEntry fallback = new DropEntry("Rock_Stone_Cobble", 100.0d, 1);
+            applyValueDefaults(fallback);
+            generated.add(fallback);
+>>>>>>> cd2cc2b (Prepare clean project state)
             return generated;
         }
         for (int i = 0; i < model.items.size(); i++) {
@@ -811,7 +1347,13 @@ public class ConfigManager {
             if (item.itemId == null || item.itemId.isBlank()) {
                 continue;
             }
+<<<<<<< HEAD
             generated.add(new DropEntry(item.itemId, (raw[i] / total) * 100.0d, 1));
+=======
+            DropEntry entry = new DropEntry(item.itemId, (raw[i] / total) * 100.0d, 1);
+            applyValueDefaults(entry);
+            generated.add(entry);
+>>>>>>> cd2cc2b (Prepare clean project state)
         }
         return generated;
     }
@@ -830,6 +1372,57 @@ public class ConfigManager {
         );
     }
 
+<<<<<<< HEAD
+=======
+    public static DropEntry getDefaultValueTemplate(String itemId) {
+        if (itemId == null || itemId.isBlank()) {
+            return new DropEntry("", 0.0d, 1, 0.0d, 0.0d, 0.0d);
+        }
+        DropEntry defaults = DROP_VALUE_DEFAULTS.get(itemId.trim().toLowerCase(Locale.ROOT));
+        if (defaults == null) {
+            return new DropEntry(itemId, 0.0d, 1, 0.0d, 0.0d, 0.0d);
+        }
+        return new DropEntry(itemId, 0.0d, 1, defaults.payAmount, defaults.repairChance, defaults.repairAmountPercent);
+    }
+
+    private static void applyValueDefaults(DropEntry drop) {
+        if (drop == null || drop.itemId == null || drop.itemId.isBlank()) {
+            return;
+        }
+        DropEntry defaults = DROP_VALUE_DEFAULTS.get(drop.itemId.trim().toLowerCase(Locale.ROOT));
+        if (defaults == null) {
+            return;
+        }
+        if (drop.payAmount <= 0.0d) {
+            drop.payAmount = defaults.payAmount;
+        }
+        if (drop.repairChance <= 0.0d) {
+            drop.repairChance = defaults.repairChance;
+        }
+        if (drop.repairAmountPercent <= 0.0d) {
+            drop.repairAmountPercent = defaults.repairAmountPercent;
+        }
+    }
+
+    private static Map<String, DropEntry> createDropValueDefaults() {
+        Map<String, DropEntry> map = new LinkedHashMap<>();
+        addDefault(map, "Rock_Stone_Cobble", 0.01d, 1.0d, 1.0d);
+        addDefault(map, "Ore_Copper_Stone", 0.50d, 5.0d, 2.0d);
+        addDefault(map, "Ore_Iron_Stone", 1.50d, 10.0d, 3.0d);
+        addDefault(map, "Ore_Gold_Stone", 3.00d, 15.0d, 4.0d);
+        addDefault(map, "Ore_Silver_Stone", 5.00d, 20.0d, 5.0d);
+        addDefault(map, "Ore_Cobalt_Shale", 15.00d, 35.0d, 10.0d);
+        addDefault(map, "Ore_Thorium_Mud", 25.00d, 50.0d, 15.0d);
+        addDefault(map, "Ore_Adamantite_Magma", 50.00d, 75.0d, 25.0d);
+        addDefault(map, "Ore_Mithril_Stone", 100.00d, 100.0d, 100.0d);
+        return Collections.unmodifiableMap(map);
+    }
+
+    private static void addDefault(Map<String, DropEntry> map, String itemId, double pay, double repairChance, double repairAmount) {
+        map.put(itemId.toLowerCase(Locale.ROOT), new DropEntry(itemId, 0.0d, 1, pay, repairChance, repairAmount));
+    }
+
+>>>>>>> cd2cc2b (Prepare clean project state)
     private double getCalculatedUpgradeCostForTier(int tier) {
         CsvTierDefaults csvTier = getCsvDefaults().get(Math.max(1, Math.min(getMaxTier(), tier)));
         if (csvTier != null) {
@@ -844,7 +1437,13 @@ public class ConfigManager {
         if (csvTier != null) {
             List<DropEntry> copy = new ArrayList<>(csvTier.drops.size());
             for (DropEntry drop : csvTier.drops) {
+<<<<<<< HEAD
                 copy.add(new DropEntry(drop.itemId, drop.chance, drop.amount));
+=======
+                DropEntry entry = new DropEntry(drop.itemId, drop.chance, drop.amount);
+                applyValueDefaults(entry);
+                copy.add(entry);
+>>>>>>> cd2cc2b (Prepare clean project state)
             }
             return copy;
         }
@@ -896,7 +1495,13 @@ public class ConfigManager {
                 List<DropEntry> drops = new ArrayList<>(DEFAULT_ITEMS.length);
                 for (int i = 0; i < DEFAULT_ITEMS.length; i++) {
                     double chance = parseDoubleSafe(cols[2 + i], 0.0d);
+<<<<<<< HEAD
                     drops.add(new DropEntry(DEFAULT_ITEMS[i], chance, 1));
+=======
+                    DropEntry entry = new DropEntry(DEFAULT_ITEMS[i], chance, 1);
+                    applyValueDefaults(entry);
+                    drops.add(entry);
+>>>>>>> cd2cc2b (Prepare clean project state)
                 }
                 result.put(level, new CsvTierDefaults(price, drops));
             }
@@ -944,6 +1549,17 @@ public class ConfigManager {
         return new File(CONFIG_FILE);
     }
 
+<<<<<<< HEAD
+=======
+    private File getUiConfigFile() {
+        CobblestoneZufallPlugin plugin = CobblestoneZufallPlugin.getInstance();
+        if (plugin != null && plugin.getDataDirectory() != null) {
+            return plugin.getDataDirectory().resolve(UI_CONFIG_FILE).toFile();
+        }
+        return new File(UI_CONFIG_FILE);
+    }
+
+>>>>>>> cd2cc2b (Prepare clean project state)
     public synchronized String getConfigFilePath() {
         return getConfigFile().getAbsolutePath();
     }

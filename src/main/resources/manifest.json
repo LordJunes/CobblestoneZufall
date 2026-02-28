@@ -1,7 +1,11 @@
 {
   "Group": "com.minecraft_ceo",
   "Name": "CobblestoneZufall",
+<<<<<<< HEAD
   "Version": "1.2.5",
+=======
+  "Version": "1.7.5",
+>>>>>>> cd2cc2b (Prepare clean project state)
   "Description": "Einzigartige Cobblestone Generator Mod mit Economy-System",
   "Authors": [
     {

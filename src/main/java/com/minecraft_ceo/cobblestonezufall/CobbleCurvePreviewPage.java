@@ -119,8 +119,14 @@ public class CobbleCurvePreviewPage extends InteractiveCustomUIPage<CobbleCurveP
             }
         }
         int detailLevel = Math.max(1, model.maxTier);
+<<<<<<< HEAD
         commandBuilder.set("#DetailTitle.Text", "Detailed resource split at level " + detailLevel
                 + " | Collect Range: " + configManager.getAutoCollectRange()
+=======
+        int travelTimeMs = configManager.getAutoCollectRangeTypeMs();
+        commandBuilder.set("#DetailTitle.Text", "Detailed resource split at level " + detailLevel
+                + " | Block TravelTime: " + (travelTimeMs <= 0 ? "NO DELAY" : (travelTimeMs + "ms"))
+>>>>>>> cd2cc2b (Prepare clean project state)
                 + " | Expected BPS: " + format(configManager.getExpectedBlocksPerSecond()));
         List<Double> detailed = calculateChancesForLevel(detailLevel);
         for (int i = 0; i < Math.min(9, model.items.size()); i++) {

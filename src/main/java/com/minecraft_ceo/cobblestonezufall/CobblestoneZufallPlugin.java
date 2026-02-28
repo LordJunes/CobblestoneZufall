@@ -16,7 +16,11 @@ import java.util.logging.Level;
 public class CobblestoneZufallPlugin extends JavaPlugin {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+<<<<<<< HEAD
     private static final String BUILD_MARKER = "2026-02-23-0648";
+=======
+    private static final String BUILD_MARKER = "2026-02-27-1126";
+>>>>>>> cd2cc2b (Prepare clean project state)
     private static CobblestoneZufallPlugin instance;
 
     private ConfigManager configManager;
@@ -45,6 +49,10 @@ public class CobblestoneZufallPlugin extends JavaPlugin {
         economyBridge.load();
         scoreboardPlaceholderBridge = new ScoreboardPlaceholderBridge(configManager);
         scoreboardPlaceholderBridge.register();
+<<<<<<< HEAD
+=======
+        FluidCollisionOverride.apply(configManager.isDebugEnabled());
+>>>>>>> cd2cc2b (Prepare clean project state)
         LOGGER.at(Level.INFO).log("[CobblestoneZufall] Config file: " + configManager.getConfigFilePath());
         LOGGER.at(Level.INFO).log("[CobblestoneZufall] Loaded tier1 drop entries: " + configManager.getDropsForTier(1).size());
 
@@ -56,6 +64,11 @@ public class CobblestoneZufallPlugin extends JavaPlugin {
         // This is the key path taken from the working example mod.
         getEntityStoreRegistry().registerSystem(new CobblestoneGeneratorSystem(configManager));
         getEntityStoreRegistry().registerSystem(new CobbleNaturalGenerationOverrideSystem(configManager));
+<<<<<<< HEAD
+=======
+        getEntityStoreRegistry().registerSystem(new CobbleNaturalSuppressionTickSystem(configManager));
+        getEntityStoreRegistry().registerSystem(new EngineTraceFinderSystem(configManager));
+>>>>>>> cd2cc2b (Prepare clean project state)
 
         LOGGER.at(Level.INFO).log("[CobblestoneZufall] Setup complete!");
     }

@@ -22,6 +22,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 
 import java.math.BigDecimal;
+<<<<<<< HEAD
+=======
+import java.util.Locale;
+>>>>>>> cd2cc2b (Prepare clean project state)
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.CompletableFuture;
@@ -33,6 +37,10 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final ConcurrentHashMap<String, Long> PENDING_REGEN_UNTIL = new ConcurrentHashMap<>();
+<<<<<<< HEAD
+=======
+    private static final ConcurrentHashMap<String, Long> ALLOW_PLACEMENT_UNTIL = new ConcurrentHashMap<>();
+>>>>>>> cd2cc2b (Prepare clean project state)
     private static final ConcurrentHashMap<Long, Boolean> TRACE_COLLECT_APPLIED = new ConcurrentHashMap<>();
     private static final Map<String, String> ORE_BLOCK_TO_ITEM = Map.ofEntries(
             Map.entry("Ore_Copper_Stone", "Ore_Copper"),
@@ -45,9 +53,19 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
             Map.entry("Ore_Mithril_Stone", "Ore_Mithril")
     );
     private static final AtomicLong BREAK_TRACE_SEQ = new AtomicLong(1L);
+<<<<<<< HEAD
     private static final boolean DEBUG_VERBOSE = false;
     private static final double RANGE_SWEEP_SOURCE_RADIUS_BLOCKS = 2.75d;
     private static final int RANGE_SWEEP_TICKS = 50;
+=======
+    private static final double RANGE_SWEEP_SOURCE_RADIUS_BLOCKS = 2.75d;
+    private static final int RANGE_SWEEP_TICKS = 8;
+    private static final long NATURAL_GUARD_SWEEP_INTERVAL_MS = 25L;
+    private static final long WATCH_MIN_DURATION_MS = 4000L;
+    private static final long WATCH_EXTRA_AFTER_REGEN_MS = 4000L;
+    private static final ConcurrentHashMap<String, Long> WATCH_BREAK_START_MS = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Long> WATCH_UNTIL_MS = new ConcurrentHashMap<>();
+>>>>>>> cd2cc2b (Prepare clean project state)
 
     private final ConfigManager configManager;
 
@@ -62,11 +80,21 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
                        Store<EntityStore> store,
                        CommandBuffer<EntityStore> commandBuffer,
                        BreakBlockEvent event) {
+<<<<<<< HEAD
+=======
+        // Retry in case setup happened before fluid assets were fully loaded.
+        FluidCollisionOverride.apply(isDebug());
+
+>>>>>>> cd2cc2b (Prepare clean project state)
         Vector3i position = event.getTargetBlock();
         BlockType blockType = event.getBlockType();
         long traceId = BREAK_TRACE_SEQ.getAndIncrement();
         if (position == null || blockType == null) {
+<<<<<<< HEAD
             if (DEBUG_VERBOSE) {
+=======
+            if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
                 LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Break ignored: missing position or blockType");
             }
             return;
@@ -74,7 +102,11 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
 
         String brokenBlockId = blockType.getId();
         if (!isManagedGeneratorBlockId(brokenBlockId)) {
+<<<<<<< HEAD
             if (DEBUG_VERBOSE) {
+=======
+            if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
                 LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Break ignored: unmanaged blockId=" + brokenBlockId);
             }
             return;
@@ -82,7 +114,11 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
 
         EntityStore entityStore = store.getExternalData();
         if (entityStore == null) {
+<<<<<<< HEAD
             if (DEBUG_VERBOSE) {
+=======
+            if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
                 LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Break ignored: entityStore is null");
             }
             return;
@@ -90,7 +126,11 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
 
         World world = entityStore.getWorld();
         if (world == null) {
+<<<<<<< HEAD
             if (DEBUG_VERBOSE) {
+=======
+            if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
                 LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Break ignored: world is null");
             }
             return;
@@ -100,12 +140,43 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
         int y = position.getY();
         int z = position.getZ();
         String key = key(x, y, z);
+<<<<<<< HEAD
+=======
+        long regenDelayMs = Math.max(0L, configManager.getRegenDelayMs());
+        EngineTraceFinderSystem.watch(x, y, z, regenDelayMs + 8000L, "break");
+        EngineTraceFinderSystem.event(x, y, z, "BREAK_SEEN",
+                "traceId=" + traceId + " blockId=" + brokenBlockId + " regenDelayMs=" + regenDelayMs);
+        armWatchPos(x, y, z, regenDelayMs + WATCH_EXTRA_AFTER_REGEN_MS);
+        if (isWatchPos(x, y, z)) {
+            WATCH_BREAK_START_MS.put(key, System.currentTimeMillis());
+            watchLog(x, y, z, "BREAK_EVENT",
+                    "traceId=" + traceId + " blockId=" + brokenBlockId + " cancelled=" + event.isCancelled());
+        }
+
+        // Important: if this key is still marked from a previous cycle, guard sweeps would skip it.
+        // Clearing here prevents early natural cobble during long regen delays.
+        ALLOW_PLACEMENT_UNTIL.remove(key);
+        if (isWatchPos(x, y, z)) {
+            watchLog(x, y, z, "ALLOW_CLEARED_ON_BREAK", "key=" + key);
+        }
+>>>>>>> cd2cc2b (Prepare clean project state)
 
         Long until = PENDING_REGEN_UNTIL.get(key);
         if (until != null && System.currentTimeMillis() < until) {
             event.setCancelled(true);
+<<<<<<< HEAD
             LOGGER.at(Level.INFO).log("[CobblestoneZufall][GEN] Blocked break during regen delay at " + key);
             if (DEBUG_VERBOSE) {
+=======
+            EngineTraceFinderSystem.event(x, y, z, "BREAK_CANCELLED_PENDING", "pendingUntil=" + until);
+            LOGGER.at(Level.INFO).log("[CobblestoneZufall][GEN] Blocked break during regen delay at " + key);
+            if (isWatchPos(x, y, z)) {
+                long now = System.currentTimeMillis();
+                watchLog(x, y, z, "BREAK_BLOCKED",
+                        "now=" + now + " pendingUntil=" + until + " remainingMs=" + Math.max(0L, until - now));
+            }
+            if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
                 LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Break cancelled due to pending regen until=" + until + " key=" + key);
             }
             return;
@@ -120,7 +191,11 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
 
         LOGGER.at(Level.INFO).log("[CobblestoneZufall][GEN] Break generator block at " + x + "," + y + "," + z
                 + " blockId=" + brokenBlockId + " lava=" + hasLava + " water=" + hasWater + " tier=" + playerTier);
+<<<<<<< HEAD
         if (DEBUG_VERBOSE) {
+=======
+        if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
             String playerPos = playerTransform == null || playerTransform.getPosition() == null
                     ? "null"
                     : playerTransform.getPosition().toString();
@@ -132,20 +207,45 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
                     + " playerPos=" + playerPos);
         }
         if (!hasLava || !hasWater) {
+<<<<<<< HEAD
             if (DEBUG_VERBOSE) {
+=======
+            EngineTraceFinderSystem.event(x, y, z, "BREAK_IGNORED_FLUID_CHECK", "hasLava=" + hasLava + " hasWater=" + hasWater);
+            if (isWatchPos(x, y, z)) {
+                watchLog(x, y, z, "BREAK_IGNORED_NO_FLUIDS", "hasLava=" + hasLava + " hasWater=" + hasWater);
+            }
+            if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
                 LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Break ignored after check: generator missing fluid adjacency");
             }
             return;
         }
+<<<<<<< HEAD
+=======
+        // Arm pending as early as possible so fluid-engine cobble has no visible window.
+        PENDING_REGEN_UNTIL.put(key, System.currentTimeMillis() + regenDelayMs + 250L);
+        if (isWatchPos(x, y, z)) {
+            long now = System.currentTimeMillis();
+            watchLog(x, y, z, "PENDING_SET_EARLY",
+                    "pendingUntil=" + (now + regenDelayMs + 250L) + " regenDelayMs=" + regenDelayMs);
+        }
+>>>>>>> cd2cc2b (Prepare clean project state)
 
         ConfigManager.DropEntry selectedEntry = resolveDropEntryForBrokenBlock(playerTier, brokenBlockId);
         String selectedDropId = selectedEntry == null ? null : selectedEntry.itemId;
         String replacementRandomDropId = configManager.getRandomDropForTier(playerTier);
         String replacementBlockId = resolveReplacementBlockId(replacementRandomDropId, playerTier);
         if (replacementBlockId == null || replacementBlockId.isBlank()) {
+<<<<<<< HEAD
             LOGGER.at(Level.WARNING).log("[CobblestoneZufall][GEN] No valid replacement for tier " + playerTier
                     + " at " + x + "," + y + "," + z + " (dropId=" + replacementRandomDropId + ")");
             if (DEBUG_VERBOSE) {
+=======
+            PENDING_REGEN_UNTIL.remove(key);
+            LOGGER.at(Level.WARNING).log("[CobblestoneZufall][GEN] No valid replacement for tier " + playerTier
+                    + " at " + x + "," + y + "," + z + " (dropId=" + replacementRandomDropId + ")");
+            if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
                 LOGGER.at(Level.WARNING).log("[CobblestoneZufall][DBG#" + traceId + "] Replacement resolution failed for dropId=" + replacementRandomDropId);
             }
             return;
@@ -160,7 +260,11 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
             amount = Math.max(1, selectedEntry.amount);
         }
         String desiredCollectItemId = resolveConfiguredToItemId(selectedDropId);
+<<<<<<< HEAD
         if (DEBUG_VERBOSE) {
+=======
+        if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
             LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Drop selection:"
                     + " selectedDropId=" + selectedDropId
                     + " replacementRandomDropId=" + replacementRandomDropId
@@ -178,6 +282,7 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
             }
         }
 
+<<<<<<< HEAD
         int collectRange = configManager.getAutoCollectRange();
         int rangeTypeMs = configManager.getAutoCollectRangeTypeMs();
         boolean playerWithinRange = sourceRef != null && isPlayerWithinRange(sourceRef, store, x, y, z, collectRange);
@@ -195,6 +300,28 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
         } else if (DEBUG_VERBOSE) {
             LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Range sweep not scheduled");
         }
+=======
+        int rangeTypeMs = configManager.getAutoCollectRangeTypeMs();
+        boolean shouldRangeCollect = sourceRef != null;
+        if (isDebug()) {
+            LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Range decision:"
+                    + " rangeType=" + (rangeTypeMs <= 0 ? "NoDelay" : (rangeTypeMs + "ms"))
+                    + " sourceRefNull=" + (sourceRef == null)
+                    + " shouldRangeCollect=" + shouldRangeCollect);
+        }
+        if (shouldRangeCollect) {
+            scheduleRangePickupSweep(world, store, sourceRef, x, y, z, rangeTypeMs, amount, desiredCollectItemId, traceId);
+        } else if (isDebug()) {
+            LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Range sweep not scheduled");
+        }
+        if (isWatchPos(x, y, z)) {
+            watchLog(x, y, z, "REGEN_SCHEDULED",
+                    "regenDelayMs=" + regenDelayMs + " replacementBlockId=" + replacementBlockId + " tier=" + playerTier);
+        }
+        EngineTraceFinderSystem.event(x, y, z, "REGEN_SCHEDULED",
+                "regenDelayMs=" + regenDelayMs + " replacement=" + replacementBlockId + " tier=" + playerTier);
+        scheduleNaturalCobbleGuard(world, x, y, z, regenDelayMs, traceId);
+>>>>>>> cd2cc2b (Prepare clean project state)
         scheduleRegeneration(world, x, y, z, replacementBlockId, playerTier);
     }
 
@@ -204,6 +331,7 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
     }
 
     private void scheduleRegeneration(World world, int x, int y, int z, String replacementBlockId, int tier) {
+<<<<<<< HEAD
         long regenDelayMs = Math.max(1L, configManager.getRegenDelayMs());
         String key = key(x, y, z);
         PENDING_REGEN_UNTIL.put(key, System.currentTimeMillis() + regenDelayMs + 250L);
@@ -213,32 +341,93 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
                     String replacement = replacementBlockId;
                     LOGGER.at(Level.INFO).log("[CobblestoneZufall][GEN] Regenerating at " + x + "," + y + "," + z
                             + " replacement=" + replacement + " tier=" + tier);
+=======
+        long regenDelayMs = Math.max(0L, configManager.getRegenDelayMs());
+        String key = key(x, y, z);
+        PENDING_REGEN_UNTIL.put(key, System.currentTimeMillis() + regenDelayMs + 250L);
+        if (isWatchPos(x, y, z)) {
+            long now = System.currentTimeMillis();
+            watchLog(x, y, z, "PENDING_SET",
+                    "pendingUntil=" + (now + regenDelayMs + 250L) + " regenDelayMs=" + regenDelayMs);
+        }
+
+        CompletableFuture.delayedExecutor(regenDelayMs, TimeUnit.MILLISECONDS).execute(() -> {
+                try {
+                    world.execute(() -> {
+                    String replacement = replacementBlockId;
+                    if (isWatchPos(x, y, z)) {
+                        watchLog(x, y, z, "REGEN_EXECUTE_START", "replacement=" + replacement + " tier=" + tier);
+                    }
+                    LOGGER.at(Level.INFO).log("[CobblestoneZufall][GEN] Regenerating at " + x + "," + y + "," + z
+                            + " replacement=" + replacement + " tier=" + tier);
+                    markPluginPlacementAllowed(x, y, z, 350L);
+>>>>>>> cd2cc2b (Prepare clean project state)
 
                     try {
                         world.setBlock(x, y, z, replacement, 0);
                         BlockType after = world.getBlockType(x, y, z);
                         String afterId = after == null ? "null" : after.getId();
+<<<<<<< HEAD
                         LOGGER.at(Level.INFO).log("[CobblestoneZufall][GEN] setBlock OK at " + x + "," + y + "," + z
                                 + " now=" + afterId);
                     } catch (IllegalArgumentException ex) {
+=======
+                        if (isWatchPos(x, y, z)) {
+                            watchLog(x, y, z, "REGEN_SETBLOCK_OK", "afterBlockId=" + afterId + " replacement=" + replacement);
+                        }
+                        LOGGER.at(Level.INFO).log("[CobblestoneZufall][GEN] setBlock OK at " + x + "," + y + "," + z
+                                + " now=" + afterId);
+                    } catch (IllegalArgumentException ex) {
+                        if (isWatchPos(x, y, z)) {
+                            watchLog(x, y, z, "REGEN_SETBLOCK_FAIL",
+                                    "replacement=" + replacement + " error=" + ex.getClass().getSimpleName());
+                        }
+>>>>>>> cd2cc2b (Prepare clean project state)
                         LOGGER.at(Level.WARNING).log("[CobblestoneZufall][GEN] setBlock failed for " + replacement
                                 + " at " + x + "," + y + "," + z + ", trying tier fallback");
                         String fallback = resolveFirstValidTierBlock(tier);
                         if (fallback != null && !fallback.equals(replacement)) {
                             try {
+<<<<<<< HEAD
                                 world.setBlock(x, y, z, fallback, 0);
                                 LOGGER.at(Level.WARNING).log("[CobblestoneZufall][GEN] Applied tier fallback block "
                                         + fallback + " at " + x + "," + y + "," + z);
                             } catch (IllegalArgumentException ignored) {
+=======
+                                markPluginPlacementAllowed(x, y, z, 350L);
+                                world.setBlock(x, y, z, fallback, 0);
+                                if (isWatchPos(x, y, z)) {
+                                    BlockType after = world.getBlockType(x, y, z);
+                                    String afterId = after == null ? "null" : after.getId();
+                                    watchLog(x, y, z, "REGEN_FALLBACK_OK", "fallback=" + fallback + " afterBlockId=" + afterId);
+                                }
+                                LOGGER.at(Level.WARNING).log("[CobblestoneZufall][GEN] Applied tier fallback block "
+                                        + fallback + " at " + x + "," + y + "," + z);
+                            } catch (IllegalArgumentException ignored) {
+                                if (isWatchPos(x, y, z)) {
+                                    watchLog(x, y, z, "REGEN_FALLBACK_FAIL", "fallback=" + fallback);
+                                }
+>>>>>>> cd2cc2b (Prepare clean project state)
                                 LOGGER.at(Level.SEVERE).log("[CobblestoneZufall][GEN] Tier fallback also invalid at "
                                         + x + "," + y + "," + z + ", no block placed");
                             }
                         }
                     } finally {
                         PENDING_REGEN_UNTIL.remove(key);
+<<<<<<< HEAD
                     }
                 })
         );
+=======
+                        if (isWatchPos(x, y, z)) {
+                            watchLog(x, y, z, "PENDING_CLEARED", "key=" + key);
+                        }
+                    }
+                });
+                } catch (Exception ignored) {
+                }
+        });
+>>>>>>> cd2cc2b (Prepare clean project state)
     }
 
     private String resolveReplacementBlockId(String configuredId, int tier) {
@@ -343,6 +532,18 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
         return false;
     }
 
+<<<<<<< HEAD
+=======
+    private static boolean isNaturalCobbleAt(World world, int x, int y, int z) {
+        BlockType type = world.getBlockType(x, y, z);
+        String id = type == null ? null : type.getId();
+        if (!isCobbleId(id)) {
+            return false;
+        }
+        return hasNearbyFluid(world, x, y, z, true) && hasNearbyFluid(world, x, y, z, false);
+    }
+
+>>>>>>> cd2cc2b (Prepare clean project state)
     private static boolean isFluidType(int fluidId, boolean lava) {
         if (fluidId <= 0) {
             return false;
@@ -366,6 +567,67 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
         return id.equals("Rock_Stone_Cobble") || id.contains("Cobble") || id.contains("cobble");
     }
 
+<<<<<<< HEAD
+=======
+    private static void scheduleNaturalCobbleGuard(World world,
+                                                   int x,
+                                                   int y,
+                                                   int z,
+                                                   long regenDelayMs,
+                                                   long traceId) {
+        long guardDurationMs = Math.max(500L, regenDelayMs + 500L);
+        int sweeps = (int) Math.max(8L, guardDurationMs / NATURAL_GUARD_SWEEP_INTERVAL_MS);
+        if (isWatchPos(x, y, z)) {
+            watchLog(x, y, z, "GUARD_SCHEDULED",
+                    "traceId=" + traceId + " sweeps=" + sweeps + " intervalMs=" + NATURAL_GUARD_SWEEP_INTERVAL_MS + " durationMs=" + guardDurationMs);
+        }
+        for (int i = 0; i < sweeps; i++) {
+            long delayMs = i * NATURAL_GUARD_SWEEP_INTERVAL_MS;
+            int sweepIndex = i + 1;
+            CompletableFuture.delayedExecutor(delayMs, TimeUnit.MILLISECONDS).execute(() -> {
+                try {
+                    world.execute(() -> {
+                        if (isWatchPos(x, y, z)) {
+                            BlockType before = world.getBlockType(x, y, z);
+                            String beforeId = before == null ? "null" : before.getId();
+                            boolean lava = hasNearbyFluid(world, x, y, z, true);
+                            boolean water = hasNearbyFluid(world, x, y, z, false);
+                            watchLog(x, y, z, "GUARD_SWEEP",
+                                    "traceId=" + traceId + " sweep=" + sweepIndex + "/" + sweeps + " delayMs=" + delayMs
+                                            + " blockBefore=" + beforeId + " lava=" + lava + " water=" + water
+                                            + " pluginAllowed=" + isPluginPlacementAllowed(x, y, z));
+                        }
+                        if (isPluginPlacementAllowed(x, y, z)) {
+                            return;
+                        }
+                        // Hard guard: while regeneration is pending, this slot must stay empty,
+                        // regardless of whether the current cobble came from fluid adjacency checks.
+                        if (isRegenPending(x, y, z)) {
+                            BlockType pendingType = world.getBlockType(x, y, z);
+                            String pendingId = pendingType == null ? null : pendingType.getId();
+                            if (isCobbleId(pendingId)) {
+                                try {
+                                    world.setBlock(x, y, z, "Empty", 0);
+                                    if (isWatchPos(x, y, z)) {
+                                        watchLog(x, y, z, "GUARD_PENDING_FORCE_EMPTY", "removedBlock=" + pendingId);
+                                    }
+                                } catch (Exception ex) {
+                                    if (isWatchPos(x, y, z)) {
+                                        watchLog(x, y, z, "GUARD_PENDING_FORCE_EMPTY_FAIL", "error=" + ex.getClass().getSimpleName());
+                                    }
+                                }
+                            }
+                            return;
+                        }
+                        // Outside regen-pending windows we do not force-delete blocks here.
+                    });
+                } catch (Exception ignored) {
+                }
+            });
+        }
+    }
+
+>>>>>>> cd2cc2b (Prepare clean project state)
     private boolean isManagedGeneratorBlockId(String id) {
         return isCobbleId(id) || configManager.containsDropIdAnyTier(id);
     }
@@ -374,11 +636,80 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
         return x + ":" + y + ":" + z;
     }
 
+<<<<<<< HEAD
+=======
+    private static boolean isWatchPos(int x, int y, int z) {
+        if (!isDebug()) {
+            return false;
+        }
+        String posKey = key(x, y, z);
+        long now = System.currentTimeMillis();
+        Long until = WATCH_UNTIL_MS.get(posKey);
+        if (until == null) {
+            return false;
+        }
+        if (until < now) {
+            WATCH_UNTIL_MS.remove(posKey, until);
+            WATCH_BREAK_START_MS.remove(posKey);
+            return false;
+        }
+        return true;
+    }
+
+    private static void armWatchPos(int x, int y, int z, long durationMs) {
+        if (!isDebug()) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        long span = Math.max(WATCH_MIN_DURATION_MS, durationMs);
+        String posKey = key(x, y, z);
+        WATCH_BREAK_START_MS.put(posKey, now);
+        WATCH_UNTIL_MS.put(posKey, now + span);
+    }
+
+    private static void watchLog(int x, int y, int z, String phase, String details) {
+        if (!isDebug()) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        String posKey = key(x, y, z);
+        Long start = WATCH_BREAK_START_MS.get(posKey);
+        long delta = start == null ? -1L : now - start;
+        String deltaText = delta >= 0L ? ("+" + delta + "ms") : "n/a";
+        LOGGER.at(Level.INFO).log("[CobblestoneZufall][WATCH " + x + "," + y + "," + z + "]"
+                + " ts=" + now
+                + " dt=" + deltaText
+                + " phase=" + phase
+                + " " + details);
+    }
+
+>>>>>>> cd2cc2b (Prepare clean project state)
     public static boolean isRegenPending(int x, int y, int z) {
         Long until = PENDING_REGEN_UNTIL.get(key(x, y, z));
         return until != null && System.currentTimeMillis() < until;
     }
 
+<<<<<<< HEAD
+=======
+    public static boolean isPluginPlacementAllowed(int x, int y, int z) {
+        String posKey = key(x, y, z);
+        long now = System.currentTimeMillis();
+        Long until = ALLOW_PLACEMENT_UNTIL.get(posKey);
+        if (until == null) {
+            return false;
+        }
+        if (until < now) {
+            ALLOW_PLACEMENT_UNTIL.remove(posKey, until);
+            return false;
+        }
+        return true;
+    }
+
+    private static void markPluginPlacementAllowed(int x, int y, int z, long durationMs) {
+        ALLOW_PLACEMENT_UNTIL.put(key(x, y, z), System.currentTimeMillis() + Math.max(250L, durationMs));
+    }
+
+>>>>>>> cd2cc2b (Prepare clean project state)
     private static void applyToolRepair(Ref<EntityStore> playerEntityRef,
                                         Store<EntityStore> store,
                                         ConfigManager.DropEntry entry) {
@@ -429,6 +760,7 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
         economy.addBalance(playerRef.getUuid(), BigDecimal.valueOf(entry.payAmount));
     }
 
+<<<<<<< HEAD
     private static boolean isPlayerWithinRange(Ref<EntityStore> playerRef,
                                                Store<EntityStore> store,
                                                int blockX,
@@ -449,13 +781,18 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
         return (dx * dx + dy * dy + dz * dz) <= maxDistanceSq;
     }
 
+=======
+>>>>>>> cd2cc2b (Prepare clean project state)
     private static void scheduleRangePickupSweep(World world,
                                                  Store<EntityStore> store,
                                                  Ref<EntityStore> playerRef,
                                                  int x,
                                                  int y,
                                                  int z,
+<<<<<<< HEAD
                                                  int collectRange,
+=======
+>>>>>>> cd2cc2b (Prepare clean project state)
                                                  int rangeTypeMs,
                                                  int desiredAmount,
                                                  String desiredItemId,
@@ -465,12 +802,25 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
         for (int i = 0; i < RANGE_SWEEP_TICKS; i++) {
             final int sweepIndex = i;
             long delay = i * intervalMs;
+<<<<<<< HEAD
             if (DEBUG_VERBOSE) {
+=======
+            if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
                 LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] Scheduling sweep "
                         + (sweepIndex + 1) + "/" + RANGE_SWEEP_TICKS + " delayMs=" + delay);
             }
             CompletableFuture.delayedExecutor(delay, TimeUnit.MILLISECONDS).execute(() ->
+<<<<<<< HEAD
                     world.execute(() -> applyPickupToNearbyDrops(world, store, playerRef, x, y, z, collectRange, rangeTypeMs, desiredAmount, desiredItemId, traceId, sweepIndex))
+=======
+            {
+                try {
+                    world.execute(() -> applyPickupToNearbyDrops(world, store, playerRef, x, y, z, rangeTypeMs, desiredAmount, desiredItemId, traceId, sweepIndex));
+                } catch (Exception ignored) {
+                }
+            }
+>>>>>>> cd2cc2b (Prepare clean project state)
             );
         }
     }
@@ -481,24 +831,39 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
                                                  int sourceX,
                                                  int sourceY,
                                                  int sourceZ,
+<<<<<<< HEAD
                                                  int collectRange,
+=======
+>>>>>>> cd2cc2b (Prepare clean project state)
                                                  int rangeTypeMs,
                                                  int desiredAmount,
                                                  String desiredItemId,
                                                  long traceId,
                                                  int sweepIndex) {
+<<<<<<< HEAD
         if (store == null || playerRef == null || collectRange <= 0) {
             if (DEBUG_VERBOSE) {
                 LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "][SWEEP " + (sweepIndex + 1)
                         + "] skipped: storeNull=" + (store == null)
                         + " playerRefNull=" + (playerRef == null)
                         + " collectRange=" + collectRange);
+=======
+        if (store == null || playerRef == null) {
+            if (isDebug()) {
+                LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "][SWEEP " + (sweepIndex + 1)
+                        + "] skipped: storeNull=" + (store == null)
+                        + " playerRefNull=" + (playerRef == null));
+>>>>>>> cd2cc2b (Prepare clean project state)
             }
             return;
         }
         TransformComponent playerTransform = store.getComponent(playerRef, TransformComponent.getComponentType());
         if (playerTransform == null || playerTransform.getPosition() == null) {
+<<<<<<< HEAD
             if (DEBUG_VERBOSE) {
+=======
+            if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
                 LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "][SWEEP " + (sweepIndex + 1)
                         + "] skipped: player transform missing");
             }
@@ -513,16 +878,24 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
         final double sourceCx = sourceX + 0.5d;
         final double sourceCy = sourceY + 0.5d;
         final double sourceCz = sourceZ + 0.5d;
+<<<<<<< HEAD
         final double sourceRadius = Math.max(RANGE_SWEEP_SOURCE_RADIUS_BLOCKS, collectRange + 1.5d);
         final double sourceRadiusSq = sourceRadius * sourceRadius;
         final double maxPlayerDistanceSq = (double) collectRange * (double) collectRange;
+=======
+        final double sourceRadius = RANGE_SWEEP_SOURCE_RADIUS_BLOCKS;
+        final double sourceRadiusSq = sourceRadius * sourceRadius;
+>>>>>>> cd2cc2b (Prepare clean project state)
 
         final int[] totalSeen = {0};
         final int[] skippedNull = {0};
         final int[] skippedEmptyStack = {0};
         final int[] skippedCannotPickUp = {0};
         final int[] skippedSourceDistance = {0};
+<<<<<<< HEAD
         final int[] skippedPlayerDistance = {0};
+=======
+>>>>>>> cd2cc2b (Prepare clean project state)
         final int[] movedTowardPlayer = {0};
         final int[] addedPickupComponent = {0};
         final StringBuilder samples = new StringBuilder();
@@ -554,6 +927,7 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
                     continue;
                 }
 
+<<<<<<< HEAD
                 double pdx = itemX - playerTransform.getPosition().getX();
                 double pdy = itemY - playerTransform.getPosition().getY();
                 double pdz = itemZ - playerTransform.getPosition().getZ();
@@ -563,12 +937,21 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
                     continue;
                 }
 
+=======
+>>>>>>> cd2cc2b (Prepare clean project state)
                 if (!itemComponent.canPickUp()) {
                     skippedCannotPickUp[0]++;
                 }
 
                 if (samples.length() < 1_500 && movedTowardPlayer[0] <= maxSamples) {
                     String itemId = itemComponent.getItemStack().getItemId();
+<<<<<<< HEAD
+=======
+                    double pdx = itemX - playerTransform.getPosition().getX();
+                    double pdy = itemY - playerTransform.getPosition().getY();
+                    double pdz = itemZ - playerTransform.getPosition().getZ();
+                    double playerDistanceSq = pdx * pdx + pdy * pdy + pdz * pdz;
+>>>>>>> cd2cc2b (Prepare clean project state)
                     samples.append(" item=").append(itemId)
                             .append(" srcDist=").append(String.format(java.util.Locale.ROOT, "%.2f", Math.sqrt(sourceDistanceSq)))
                             .append(" playerDist=").append(String.format(java.util.Locale.ROOT, "%.2f", Math.sqrt(playerDistanceSq)));
@@ -606,18 +989,28 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
             }
         });
 
+<<<<<<< HEAD
         if (DEBUG_VERBOSE) {
             LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "][SWEEP " + (sweepIndex + 1) + "] "
                     + "source=(" + sourceX + "," + sourceY + "," + sourceZ + ")"
                     + " playerPos=" + playerTransform.getPosition()
                     + " collectRange=" + collectRange
+=======
+        if (isDebug()) {
+            LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "][SWEEP " + (sweepIndex + 1) + "] "
+                    + "source=(" + sourceX + "," + sourceY + "," + sourceZ + ")"
+                    + " playerPos=" + playerTransform.getPosition()
+>>>>>>> cd2cc2b (Prepare clean project state)
                     + " sourceRadius=" + String.format(java.util.Locale.ROOT, "%.2f", sourceRadius)
                     + " totals: seen=" + totalSeen[0]
                     + " null=" + skippedNull[0]
                     + " empty=" + skippedEmptyStack[0]
                     + " cantPickup=" + skippedCannotPickUp[0]
                     + " sourceOut=" + skippedSourceDistance[0]
+<<<<<<< HEAD
                     + " playerOut=" + skippedPlayerDistance[0]
+=======
+>>>>>>> cd2cc2b (Prepare clean project state)
                     + " moved=" + movedTowardPlayer[0]
                     + " pickupAdded=" + addedPickupComponent[0]
                     + (samples.length() > 0 ? " samples:" + samples : ""));
@@ -666,7 +1059,11 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
             }
         } catch (Exception ignored) {
         }
+<<<<<<< HEAD
         if (DEBUG_VERBOSE) {
+=======
+        if (isDebug()) {
+>>>>>>> cd2cc2b (Prepare clean project state)
             LOGGER.at(Level.INFO).log("[CobblestoneZufall][DBG#" + traceId + "] forcedCollect mode=" + mode
                     + " itemId=" + itemId + " amount=" + Math.max(1, amount));
         }
@@ -677,4 +1074,17 @@ public class CobblestoneGeneratorSystem extends EntityEventSystem<EntityStore, B
         return 50L;
     }
 
+<<<<<<< HEAD
 }
+=======
+    private static boolean isDebug() {
+        CobblestoneZufallPlugin plugin = CobblestoneZufallPlugin.getInstance();
+        if (plugin == null || plugin.getConfigManager() == null) {
+            return false;
+        }
+        return plugin.getConfigManager().isDebugEnabled();
+    }
+
+}
+
+>>>>>>> cd2cc2b (Prepare clean project state)

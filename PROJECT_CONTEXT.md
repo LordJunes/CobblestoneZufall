@@ -20,6 +20,10 @@ This file is the single source of truth for the current CobblestoneZufall implem
 ### Registered systems
 - `CobblestoneGeneratorSystem`
 - `CobbleNaturalGenerationOverrideSystem`
+<<<<<<< HEAD
+=======
+- `CobbleNaturalSuppressionTickSystem`
+>>>>>>> cd2cc2b (Prepare clean project state)
 
 ### Registered commands
 - `/cob` (player upgrade UI)
@@ -58,11 +62,27 @@ A block is managed when all checks pass:
 - Replacement block resolved via tier drop random
 - Fallback to first valid block asset when needed
 
+<<<<<<< HEAD
+=======
+### Natural generation suppression
+- `FluidCollisionOverride` patches runtime `DefaultFluidTicker` collision outputs for `Lava*` + `Water*` to `Air`, disabling engine-level natural cobble creation at source.
+- `CobbleNaturalGenerationOverrideSystem` hard-stops natural lava+water cobble creation.
+- Natural cobble at fluid-contact positions is converted to air.
+- Multiple delayed neighborhood sweeps are executed to catch delayed fluid updates.
+- `CobbleNaturalSuppressionTickSystem` performs periodic suppression scans near players as event-independent fallback.
+- `CobblestoneGeneratorSystem` adds a per-break position guard that repeatedly clears natural cobble at the exact generator block position during the configured delay window.
+- Only plugin-managed placements from scheduled regeneration are allowed.
+
+>>>>>>> cd2cc2b (Prepare clean project state)
 ## 4) Drop Profile, Reward, and Repair
 
 Final behavior:
 - `Drop Amount`, `Pay Amount`, `Repair Chance`, `Repair Amount` are resolved from the actually mined visible drop profile.
 - This avoids value mixing between cobble and ore profiles.
+<<<<<<< HEAD
+=======
+- Core cobble/ore ids have non-zero default Pay/Repair templates (pre-filled in admin editor and applied as fallback).
+>>>>>>> cd2cc2b (Prepare clean project state)
 
 Resolution order:
 1. Direct block-id match against tier drops (`brokenBlockId`)
@@ -88,6 +108,7 @@ Reward application:
 
 This mapping defines credited item ids.
 
+<<<<<<< HEAD
 ## 6) Collect System (Range + RangeType)
 
 ### Collect Range
@@ -105,6 +126,21 @@ Admin UI toggles:
 - Target stack is forced to configured `Drop Amount`.
 
 Teleport mode:
+=======
+## 6) Collect System (BLOCK TRAVELTIME)
+
+### BLOCK TRAVELTIME
+Admin UI button:
+- `0ms` (`NO DELAY`)
+- `100ms .. 5000ms` in `100ms` steps
+
+### Behavior
+- Collection is no longer range-based.
+- On valid generator break, nearby dropped entity is processed from source position.
+- Target stack is forced to configured `Drop Amount`.
+
+No-delay mode (`0ms`):
+>>>>>>> cd2cc2b (Prepare clean project state)
 - Instant inventory grant
 - Hard entity removal (`ItemStack.EMPTY`, pickup removed, entity removed)
 - Prevents visual leftovers and duplicate loot
@@ -117,15 +153,28 @@ Timed mode (`100..5000ms`):
 
 ### `/cobadmin` (`CobbleConfigPage`)
 - Tier info
+<<<<<<< HEAD
 - Block delay (`regenDelayMs`)
 - Expected BPS
 - Collect range toggle
 - RangeType toggle (left/right click)
+=======
+- Block delay button (`+/-100ms`, middle click reset, default `1000ms`)
+- Estimated mined blocks/sec button (`-0.1/+0.1`, middle click reset, default `1.0`)
+- BLOCK TRAVELTIME button (`+/-100ms`, middle click reset, default `100ms`)
+- DEBUG button (`DEBUG: ON/OFF`) enabling verbose runtime diagnostics
+>>>>>>> cd2cc2b (Prepare clean project state)
 - Per-drop list (up to 12 visible rows, sorted by chance)
 - Links:
   - Curve model (`CobbleCurvePage`)
   - Drop editor (`CobbleDropEditPage`)
 
+<<<<<<< HEAD
+=======
+### `/cobadmin curve` (`CobbleCurvePage`)
+- Chance/Cost mode cycle buttons support middle-click reset to default mode `POWER`.
+
+>>>>>>> cd2cc2b (Prepare clean project state)
 ### Drop editor (`CobbleDropEditPage`)
 Per drop:
 - `Drop Amount` (int >= 1)
@@ -144,7 +193,11 @@ Tier progression tuning:
 
 ### `/cob` (`CobUpgradePage`)
 - Player upgrade flow with confirmation
+<<<<<<< HEAD
 - Current and next values
+=======
+- Current tier vs viewed tier values (projection arrows)
+>>>>>>> cd2cc2b (Prepare clean project state)
 - Economy balance/cost interaction
 
 ## 8) Economy
@@ -189,6 +242,10 @@ Token normalization:
 
 Main files:
 - `cobble_config.json`
+<<<<<<< HEAD
+=======
+- `cobble_ui_config.json`
+>>>>>>> cd2cc2b (Prepare clean project state)
 - `CobPlayerSaveTable.csv`
 - `CobMiningTotals.csv`
 
@@ -196,9 +253,16 @@ Stored content:
 - tiers, drops, upgrades
 - curve model
 - player tier assignments
+<<<<<<< HEAD
 - collect range / range type
 - regen delay / expected BPS
 - mining lifetime totals
+=======
+- block travel time
+- regen delay / expected BPS
+- mining lifetime totals
+- UI display settings (curve rows per page, `/cob` visible rows)
+>>>>>>> cd2cc2b (Prepare clean project state)
 
 Economy storage:
 - Internal persistence in `EconomyBridge`
@@ -229,6 +293,10 @@ Economy storage:
 2. Copies it to local `server/HytaleServer.jar` when missing
 3. Runs `gradlew.bat clean shadowJar`
 4. Auto-installs built jar into `%APPDATA%/Hytale/UserData/Mods`
+<<<<<<< HEAD
+=======
+5. Exports example config files into `build/config_bundle`
+>>>>>>> cd2cc2b (Prepare clean project state)
 
 ## 12) Resources / UI Files
 
@@ -263,7 +331,11 @@ Other resource:
 
 ## 14) Operational Notes
 
+<<<<<<< HEAD
 - Generator debug logging is disabled by default (`DEBUG_VERBOSE = false`).
+=======
+- Global debug logging is toggled at runtime via `/cobadmin` (`DEBUG: ON/OFF`).
+>>>>>>> cd2cc2b (Prepare clean project state)
 - `README.md` should stay aligned with this file.
 - Known build warning: deprecation around `Player.getPlayerRef()`, currently non-blocking.
 
@@ -271,7 +343,11 @@ Other resource:
 
 Current implementation is stable with:
 - separated per-drop values,
+<<<<<<< HEAD
 - reliable range collect including teleport without duplicate loot,
+=======
+- reliable timed/no-delay collect without duplicate loot,
+>>>>>>> cd2cc2b (Prepare clean project state)
 - correct ore block/item mapping,
 - persistent mining statistics and full placeholder bridge,
 - production-ready build/deploy workflow.

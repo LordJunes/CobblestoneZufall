@@ -32,7 +32,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class CobUpgradePage extends InteractiveCustomUIPage<CobUpgradePage.Data> {
+<<<<<<< HEAD
     private static final int MAX_ROWS = 12;
+=======
+    private static final int UI_MAX_ROWS = 12;
+>>>>>>> cd2cc2b (Prepare clean project state)
     private static final long UPGRADE_DENIED_MESSAGE_MS = 2_000L;
     private static final long UPGRADE_BUY_UNLOCK_MS = 3_000L;
     private static final long PROMPT_REFRESH_MS = 100L;
@@ -77,12 +81,20 @@ public class CobUpgradePage extends InteractiveCustomUIPage<CobUpgradePage.Data>
     private long deniedMessageUntilMs = 0L;
     private String deniedMessage = "";
     private Double lockedAverageBps = null;
+<<<<<<< HEAD
+=======
+    private final int visibleRows;
+>>>>>>> cd2cc2b (Prepare clean project state)
 
     public CobUpgradePage(PlayerRef playerRef, ConfigManager configManager, EconomyBridge economyBridge) {
         super(playerRef, CustomPageLifetime.CanDismiss, Data.CODEC);
         this.playerUuid = playerRef.getUuid();
         this.configManager = configManager;
         this.economyBridge = economyBridge;
+<<<<<<< HEAD
+=======
+        this.visibleRows = Math.max(1, Math.min(UI_MAX_ROWS, configManager.getUpgradeRowsVisible()));
+>>>>>>> cd2cc2b (Prepare clean project state)
     }
 
     public static void open(Ref<EntityStore> entityRef,
@@ -115,22 +127,37 @@ public class CobUpgradePage extends InteractiveCustomUIPage<CobUpgradePage.Data>
 
         int tier = configManager.getPlayerTier(playerUuid);
         int maxTier = configManager.getMaxTier();
+<<<<<<< HEAD
         int nextTier = Math.min(maxTier, tier + 1);
+=======
+        int upgradeTargetTier = Math.min(maxTier, tier + 1);
+>>>>>>> cd2cc2b (Prepare clean project state)
 
         projectionOffset = clampProjectionOffset(projectionOffset, tier, maxTier);
         int projectionTier = tier + projectionOffset;
 
         List<ConfigManager.DropEntry> currentDrops = configManager.getDropsForTier(tier);
+<<<<<<< HEAD
         List<ConfigManager.DropEntry> nextDrops = configManager.getDropsForTier(nextTier);
+=======
+        List<ConfigManager.DropEntry> viewedDrops = configManager.getDropsForTier(projectionTier);
+>>>>>>> cd2cc2b (Prepare clean project state)
         List<ConfigManager.DropEntry> projectionDrops = configManager.getDropsForTier(projectionTier);
 
         commandBuilder.append("Pages/CobUpgrade.ui");
         commandBuilder.set("#PageTitle.TextSpans", Message.raw("Cobblestone Upgrade Menu"));
         commandBuilder.set("#TierLabel.Text", "Your Tier: " + tier + " / " + maxTier);
+<<<<<<< HEAD
         commandBuilder.set("#TierCompare.Text", "Current LV " + tier + "  ->  Next LV " + nextTier);
         commandBuilder.set("#RowsHeader.Text", "Resource breakdown");
         commandBuilder.set("#ColChance.Text", "Current Chance (%)");
         commandBuilder.set("#ColNext.Text", "Next Level Chance (%)");
+=======
+        commandBuilder.set("#TierCompare.Text", "Current LV " + tier + "  ->  Viewed LV " + projectionTier);
+        commandBuilder.set("#RowsHeader.Text", "Resource breakdown");
+        commandBuilder.set("#ColChance.Text", "Current Chance (%)");
+        commandBuilder.set("#ColNext.Text", "Viewed Tier Chance (%)");
+>>>>>>> cd2cc2b (Prepare clean project state)
         commandBuilder.set("#ColMin.Text", "Blocks per Minute");
         commandBuilder.set("#ColHour.Text", "Blocks per Hour");
         commandBuilder.set("#ColDay.Text", "Blocks per Day");
@@ -141,9 +168,15 @@ public class CobUpgradePage extends InteractiveCustomUIPage<CobUpgradePage.Data>
         commandBuilder.set("#YieldInfo.Text", "The figures for minutes/hours/day are based on the average amount you mined in the last 60 seconds ["
                 + formatBps(averageBpsLastMinute) + " blocks per second]");
 
+<<<<<<< HEAD
         List<RowData> rows = buildRows(currentDrops, nextDrops, projectionDrops, averageBpsLastMinute);
         int visible = Math.min(MAX_ROWS, rows.size());
         for (int i = 0; i < MAX_ROWS; i++) {
+=======
+        List<RowData> rows = buildRows(currentDrops, viewedDrops, projectionDrops, averageBpsLastMinute);
+        int visible = Math.min(visibleRows, rows.size());
+        for (int i = 0; i < UI_MAX_ROWS; i++) {
+>>>>>>> cd2cc2b (Prepare clean project state)
             String row = "#Row" + i;
             if (i >= visible) {
                 commandBuilder.set(row + ".Visible", false);
@@ -178,7 +211,11 @@ public class CobUpgradePage extends InteractiveCustomUIPage<CobUpgradePage.Data>
 
         if (confirmState == ConfirmState.PROMPT) {
             long remainingMs = Math.max(0L, buyUnlockAtMs - now);
+<<<<<<< HEAD
             commandBuilder.set("#PromptText.Text", "Upgrade LV " + tier + " -> " + nextTier + " for " + formatMoney(upgradeCost) + "?");
+=======
+            commandBuilder.set("#PromptText.Text", "Upgrade LV " + tier + " -> " + upgradeTargetTier + " for " + formatMoney(upgradeCost) + "?");
+>>>>>>> cd2cc2b (Prepare clean project state)
             commandBuilder.set("#PromptBuyButton.Text", remainingMs > 0L
                     ? ("BUY in " + formatCountdownTenths(remainingMs))
                     : "CONFIRM BUY");
@@ -509,16 +546,28 @@ public class CobUpgradePage extends InteractiveCustomUIPage<CobUpgradePage.Data>
     }
 
     private List<RowData> buildRows(List<ConfigManager.DropEntry> currentDrops,
+<<<<<<< HEAD
                                     List<ConfigManager.DropEntry> nextDrops,
                                     List<ConfigManager.DropEntry> projectionDrops,
                                     double blocksPerSecond) {
         Map<String, ConfigManager.DropEntry> currentMap = toDropMap(currentDrops);
         Map<String, ConfigManager.DropEntry> nextMap = toDropMap(nextDrops);
+=======
+                                    List<ConfigManager.DropEntry> viewedDrops,
+                                    List<ConfigManager.DropEntry> projectionDrops,
+                                    double blocksPerSecond) {
+        Map<String, ConfigManager.DropEntry> currentMap = toDropMap(currentDrops);
+        Map<String, ConfigManager.DropEntry> viewedMap = toDropMap(viewedDrops);
+>>>>>>> cd2cc2b (Prepare clean project state)
         Map<String, ConfigManager.DropEntry> projectionMap = toDropMap(projectionDrops);
 
         Set<String> ids = new HashSet<>();
         ids.addAll(currentMap.keySet());
+<<<<<<< HEAD
         ids.addAll(nextMap.keySet());
+=======
+        ids.addAll(viewedMap.keySet());
+>>>>>>> cd2cc2b (Prepare clean project state)
         ids.addAll(projectionMap.keySet());
 
         List<RowData> rows = new ArrayList<>();
@@ -528,11 +577,19 @@ public class CobUpgradePage extends InteractiveCustomUIPage<CobUpgradePage.Data>
 
         for (String itemId : ids) {
             ConfigManager.DropEntry current = currentMap.get(itemId);
+<<<<<<< HEAD
             ConfigManager.DropEntry next = nextMap.get(itemId);
             ConfigManager.DropEntry projected = projectionMap.get(itemId);
 
             double currentChance = current == null ? 0.0d : Math.max(0.0d, current.chance);
             double nextChance = next == null ? 0.0d : Math.max(0.0d, next.chance);
+=======
+            ConfigManager.DropEntry viewed = viewedMap.get(itemId);
+            ConfigManager.DropEntry projected = projectionMap.get(itemId);
+
+            double currentChance = current == null ? 0.0d : Math.max(0.0d, current.chance);
+            double viewedChance = viewed == null ? 0.0d : Math.max(0.0d, viewed.chance);
+>>>>>>> cd2cc2b (Prepare clean project state)
             double projectedChance = projected == null ? 0.0d : Math.max(0.0d, projected.chance);
             int currentAmount = current == null ? 1 : Math.max(1, current.amount);
             int projectedAmount = projected == null ? 1 : Math.max(1, projected.amount);
@@ -544,8 +601,13 @@ public class CobUpgradePage extends InteractiveCustomUIPage<CobUpgradePage.Data>
             row.itemId = itemId;
             row.displayName = shortName(itemId);
             row.currentChance = currentChance;
+<<<<<<< HEAD
             row.nextChance = nextChance;
             row.deltaChance = nextChance - currentChance;
+=======
+            row.nextChance = viewedChance;
+            row.deltaChance = viewedChance - currentChance;
+>>>>>>> cd2cc2b (Prepare clean project state)
             row.currentPerMin = perMinuteBase * currentMultiplier;
             row.currentPerHour = perHourBase * currentMultiplier;
             row.currentPerDay = perDayBase * currentMultiplier;
@@ -555,7 +617,11 @@ public class CobUpgradePage extends InteractiveCustomUIPage<CobUpgradePage.Data>
             row.deltaPerMin = row.projectedPerMin - row.currentPerMin;
             row.deltaPerHour = row.projectedPerHour - row.currentPerHour;
             row.deltaPerDay = row.projectedPerDay - row.currentPerDay;
+<<<<<<< HEAD
             row.sortWeight = Math.max(Math.max(currentChance, nextChance), projectedChance);
+=======
+            row.sortWeight = Math.max(Math.max(currentChance, viewedChance), projectedChance);
+>>>>>>> cd2cc2b (Prepare clean project state)
             rows.add(row);
         }
 

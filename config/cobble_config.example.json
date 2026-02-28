@@ -1,0 +1,30 @@
+﻿{
+  "maxTier": 100,
+  "regenDelayMs": 1000,
+  "autoCollectRange": 6,
+  "autoCollectToInventory": true,
+  "autoCollectRangeTypeMs": 100,
+  "expectedBlocksPerSecond": 1.0,
+  "debugEnabled": false,
+  "tiers": {
+    "1": {
+      "upgradeCost": 0.0,
+      "drops": [
+        { "itemId": "Rock_Stone_Cobble", "chance": 99.5, "amount": 1, "payAmount": 0.5, "repairChance": 0.0, "repairAmountPercent": 0.0 }
+      ]
+    }
+  },
+  "players": {},
+  "curveModel": {
+    "maxTier": 100,
+    "maxUpgradeCost": 1000000000.0,
+    "chanceMode": "POWER",
+    "chanceExponent": 1.8,
+    "costMode": "POWER",
+    "costExponent": 4.0,
+    "items": [
+      { "itemId": "Rock_Stone_Cobble", "startChance": 99.5, "endChance": 86.4 },
+      { "itemId": "Ore_Copper_Stone", "startChance": 0.4, "endChance": 4.0 }
+    ]
+  }
+}

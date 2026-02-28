@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Gradle & Build
+=======
+﻿# Gradle & Build
+>>>>>>> cd2cc2b (Prepare clean project state)
 .gradle/
 build/
 out/
@@ -16,9 +20,25 @@ libs/
 user/
 Backup/
 
+<<<<<<< HEAD
 # Temporäre Dateien & Kompiliertes
+=======
+# Temp and compiled artifacts
+>>>>>>> cd2cc2b (Prepare clean project state)
 *.class
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
 *.log
 .DS_Store
+<<<<<<< HEAD
+=======
+__pycache__/
+*.pyc
+tmp_*.png
+tmp_*.mp4
+tmp_video_frames/
+tools/export/
+
+# Hytale Internal Knowledge Base
+knowledge/
+>>>>>>> cd2cc2b (Prepare clean project state)

@@ -75,12 +75,22 @@ public class CobbleDropEditPage extends InteractiveCustomUIPage<CobbleDropEditPa
 
         ConfigManager.DropEntry entry = configManager.getDropForTierById(tier, itemId);
         if (entry == null) {
+<<<<<<< HEAD
             commandBuilder.set("#PageTitle.TextSpans", Message.raw("Drop Editor"));
             commandBuilder.set("#ItemLabel.Text", "Drop not found: " + itemId);
             commandBuilder.set("#DropAmountInput.Value", "1");
             commandBuilder.set("#PayAmountInput.Value", "$0.00");
             commandBuilder.set("#RepairChanceInput.Value", "0%");
             commandBuilder.set("#RepairAmountInput.Value", "0%");
+=======
+            ConfigManager.DropEntry defaults = ConfigManager.getDefaultValueTemplate(itemId);
+            commandBuilder.set("#PageTitle.TextSpans", Message.raw("Drop Editor"));
+            commandBuilder.set("#ItemLabel.Text", "Drop not found: " + itemId);
+            commandBuilder.set("#DropAmountInput.Value", "1");
+            commandBuilder.set("#PayAmountInput.Value", "$" + format(defaults.payAmount));
+            commandBuilder.set("#RepairChanceInput.Value", format(defaults.repairChance) + "%");
+            commandBuilder.set("#RepairAmountInput.Value", format(defaults.repairAmountPercent) + "%");
+>>>>>>> cd2cc2b (Prepare clean project state)
         } else {
             commandBuilder.set("#PageTitle.TextSpans", Message.raw("Drop Editor"));
             commandBuilder.set("#ItemLabel.Text", itemId + " (Tier " + tier + ")");
@@ -135,14 +145,20 @@ public class CobbleDropEditPage extends InteractiveCustomUIPage<CobbleDropEditPa
             player.sendMessage(Message.raw("[CobblestoneZufall] Pay Amount must be >= 0."));
             return;
         }
+<<<<<<< HEAD
         if (repairChance < 0.0d || repairChance > 100.0d) {
             player.sendMessage(Message.raw("[CobblestoneZufall] Repair Chance must be between 0 and 100."));
+=======
+        if (repairChance < 0.0d) {
+            player.sendMessage(Message.raw("[CobblestoneZufall] Repair Chance must be >= 0."));
+>>>>>>> cd2cc2b (Prepare clean project state)
             return;
         }
         if (repairAmountPercent < 0.0d) {
             player.sendMessage(Message.raw("[CobblestoneZufall] Repair Amount % must be >= 0."));
             return;
         }
+<<<<<<< HEAD
 
         configManager.updateDropDetails(tier, itemId, dropAmount, payAmount, repairChance, repairAmountPercent);
         player.sendMessage(Message.raw("[CobblestoneZufall] Saved " + itemId
@@ -150,6 +166,20 @@ public class CobbleDropEditPage extends InteractiveCustomUIPage<CobbleDropEditPa
                 + " | Pay=" + format(payAmount)
                 + " | RepairChance=" + format(repairChance)
                 + "% | RepairAmount=" + format(repairAmountPercent) + "%"));
+=======
+        double clampedRepairChance = Math.min(100.0d, repairChance);
+        double clampedRepairAmountPercent = Math.min(100.0d, repairAmountPercent);
+        if (clampedRepairChance != repairChance || clampedRepairAmountPercent != repairAmountPercent) {
+            player.sendMessage(Message.raw("[CobblestoneZufall] Repair values were capped at 100%."));
+        }
+
+        configManager.updateDropDetails(tier, itemId, dropAmount, payAmount, clampedRepairChance, clampedRepairAmountPercent);
+        player.sendMessage(Message.raw("[CobblestoneZufall] Saved " + itemId
+                + " | Drop=" + dropAmount
+                + " | Pay=" + format(payAmount)
+                + " | RepairChance=" + format(clampedRepairChance)
+                + "% | RepairAmount=" + format(clampedRepairAmountPercent) + "%"));
+>>>>>>> cd2cc2b (Prepare clean project state)
         CobbleConfigPage.open(entityRef, store, playerRef, configManager, tier);
     }
 

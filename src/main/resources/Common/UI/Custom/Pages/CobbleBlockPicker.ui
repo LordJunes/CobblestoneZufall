@@ -1,0 +1,72 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@Container {
+    Anchor: (Width: 1180, Height: 940);
+
+    #Title {
+      $C.@Title { @Text = ""; }
+      Label {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 22, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center);
+        Text: "Add Block";
+        Anchor: (Height: 34);
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Left: 20, Right: 20, Top: 14, Bottom: 14);
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Height: 34, Bottom: 8);
+        Label #CountInfo { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9fd1ff, RenderBold: true); FlexWeight: 1; }
+        TextButton #ResultUpButton { Anchor: (Width: 42, Height: 30, Right: 4); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "^"; }
+        TextButton #ResultDownButton { Anchor: (Width: 42, Height: 30, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "v"; }
+        TextButton #ApplySearchButton { Anchor: (Width: 86, Height: 30, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "APPLY"; }
+        TextButton #ClearButton { Anchor: (Width: 90, Height: 30, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "CLEAR"; }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d5ffd5, RenderBold: true); Text: "Search"; Anchor: (Width: 48, Height: 30, Right: 6); }
+        $C.@TextField #SearchInput { Anchor: (Width: 320, Height: 30); }
+      }
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Height: 28, Bottom: 4);
+        Background: (Color: #2e3946(0.9));
+        Padding: (Left: 8, Right: 8);
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #ffffff, RenderBold: true); Text: "Block"; FlexWeight: 1; }
+        Label { Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #ffffff, RenderBold: true); Text: "Action"; Anchor: (Width: 120); }
+      }
+
+      Group #Entries {
+        LayoutMode: Top;
+        Anchor: (Height: 700, Bottom: 8);
+
+        Group #Entry0  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry0Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry0Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry0Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry1  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry1Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry1Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry1Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry2  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry2Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry2Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry2Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry3  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry3Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry3Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry3Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry4  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry4Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry4Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry4Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry5  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry5Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry5Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry5Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry6  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry6Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry6Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry6Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry7  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry7Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry7Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry7Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry8  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry8Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry8Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry8Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry9  { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry9Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry9Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry9Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry10 { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry10Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry10Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry10Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+        Group #Entry11 { LayoutMode: Left; Anchor: (Height: 38, Bottom: 3); Padding: (Left: 8, Right: 8); Background: (Color: #141f2c(0.85)); ItemIcon #Entry11Icon { Anchor: (Width: 24, Height: 24, Right: 8); } Label #Entry11Name { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #ffffff); FlexWeight: 1; } TextButton #Entry11Add { Anchor: (Width: 110, Height: 28); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "ADD"; } }
+      }
+
+      Label #StatusInfo { Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ff9f9f, RenderBold: true); Anchor: (Height: 18, Bottom: 6); }
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Height: 40);
+        TextButton #BackButton { Anchor: (Width: 120, Height: 34, Right: 8); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "BACK"; }
+        TextButton #CloseButton { Anchor: (Width: 120, Height: 34); Style: (...$C.@SecondaryTextButtonStyle, Sounds: $Sounds.@ButtonsLight); Text: "CLOSE"; }
+      }
+    }
+  }
+}

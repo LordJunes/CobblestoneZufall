@@ -1,0 +1,9 @@
+﻿{
+  "presets": {
+    "BALANCED": "Use current start/end values as baseline",
+    "COMMON": "Shifts weight toward common blocks",
+    "RARE": "Shifts weight toward rare blocks",
+    "LEGENDARY": "Strong shift to rare/legendary blocks"
+  },
+  "note": "Preset math is implemented in CobbleCurvePage. This file is for server documentation/tuning notes."
+}
